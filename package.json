@@ -21,6 +21,19 @@
     "url-parse": "^1.2.0",
     "webpack": "^3.10.0"
   },
+  "keywords": [
+    "affiliate",
+    "amazon",
+    "viglink",
+    "link",
+    "affiliation",
+    "refer",
+    "referral",
+    "marketing",
+    "adwords",
+    "ads",
+    "advertisement"
+  ],
   "scripts": {
     "build": "webpack",
     "test": "sh ./test/test.sh"

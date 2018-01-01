@@ -1,6 +1,6 @@
 var parseURL = require('url-parse');
 
-global.a = [];
+var inst = [];
 
 var log = function (err, info) {
     if (err) {
@@ -16,35 +16,6 @@ var Affiliate = function (config) {
         tags: []
     }, config);
 
-    //for development
-    config = {
-        log: true,
-        tags: [
-            {
-                hosts: ['example.com', 'www.example.com'],
-                query: {
-                    ref: 'my-tag'
-                },
-                replace: [
-                    {
-                        from: 'ref-tag',
-                        to: 'my-tag'
-                    },
-                    {
-                        from: /ref-regex/g,
-                        to: 'my-tag'
-                    }
-                ],
-                modifyPath: function (path) {
-                    return path + '-tag';
-                },
-                modifyHost: function (host) {
-                    return 'ref.' + host;
-                }
-            }
-        ]
-    };
-    
     var hosts = [];
     for (var i in config.tags) {
         config.tags[i] = Object.assign({
@@ -141,25 +112,25 @@ var Affiliate = function (config) {
     }.bind(this);
 };
 
-module.exports = function () {
-    var aff = new Affiliate(arguments);
-    global.a.push(aff);
+module.exports = function (config) {
+    var aff = new Affiliate(config);
+    inst.push(aff);
     return aff;
 };
 
 module.exports.instances = function () {
-    return [].concat(global.a);
+    return [].concat(inst);
 };
 
 module.exports.detachAll = function () {
-    for (var i in global.a) {
-        global.a[i].detach();
+    for (var i in inst) {
+        inst[i].detach();
     }
 };
 
 module.exports.revert = function () {
-    for (var i in global.a) {
-        global.a[i].detach();
+    for (var i in inst) {
+        inst[i].detach();
     }
     var nodes = [].slice.call(document.body.getElementsByTagName('a'));
     for (var i in nodes) {

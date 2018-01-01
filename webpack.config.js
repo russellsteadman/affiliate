@@ -51,10 +51,8 @@ module.exports = {
       return assetFilename.endsWith('.css') || assetFilename.endsWith('.js');
     }
   },
-  devtool: 'source-map',
   context: __dirname,
   target: 'web',
-  stats: 'errors-only',
   plugins: [
     new UglifyJsPlugin()
   ]
