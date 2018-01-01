@@ -20,7 +20,7 @@ With a CDN
 
 ## Documentation
 
-[Read it!](https://teamtofu.github.io/affiliate)
+[Read it!](https://teamtofu.github.io/affiliate/)
 
 ## License
 
