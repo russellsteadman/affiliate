@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Affiliate Test Suite</title>
+    <script src="suite.js"></script>
+    <script>
+        var aff = Affiliate({
+            log: true,
+            tags: [
+                {
+                    hosts: ['example.com', 'www.example.com'],
+                    query: {
+                        ref: 'my-tag'
+                    },
+                    replace: [
+                        {
+                            from: 'ref-tag',
+                            to: 'my-tag'
+                        },
+                        {
+                            from: /ref-regex/g,
+                            to: 'my-tag'
+                        }
+                    ],
+                    modifyPath: function (path) {
+                        return path + '-tag';
+                    },
+                    modifyHost: function (host) {
+                        return 'rdr.' + host;
+                    }
+                }
+            ]
+        });
+        aff.attach();
+        window.mutate = function () {
+            var mut = document.getElementById("mut");
+            var a = document.createElement('a');
+            a.setAttribute('href', 'https://example.com/test/ref-tag/ref-regex2/?stuff=2#cool');
+            a.innerHTML = 'Link';
+            mut.appendChild(a);
+        };
+    </script>
+</head>
+<body>
+    <a href="https://example.com/test/dnjsb">Link</a>
+    <div>
+        <span><a href="https://example.com/test/ref-tag/ref-regex2/?stuff=2#cool">Link</a></span>
+    </div>
+    <button onclick="mutate();">Mutate</button>
+    <div><div id="mut"></div></div>
+</body>
+</html>
