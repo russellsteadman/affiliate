@@ -1,6 +1,6 @@
 {
   "name": "affiliate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A platform agnostic tool to quickly add affiliate links onto your website",
   "main": "index.js",
   "repository": "https://github.com/teamtofu/affiliate.git",
@@ -8,8 +8,8 @@
   "author": "Russell Steadman <russell@unatetra.com> (https://unatetra.com/)",
   "license": "MIT",
   "bugs": {
-    "url" : "https://github.com/teamtofu/affiliate/issues",
-    "email" : "russell@unatetra.com"
+    "url": "https://github.com/teamtofu/affiliate/issues",
+    "email": "russell@unatetra.com"
   },
   "private": false,
   "devDependencies": {
