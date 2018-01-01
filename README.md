@@ -18,6 +18,11 @@ With a CDN
 <script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
 ```
 
+With Bower
+```bash
+$ bower install -S affiliate
+```
+
 ## Documentation
 
 [Read it!](https://teamtofu.github.io/affiliate/)
