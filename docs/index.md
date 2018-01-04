@@ -99,7 +99,7 @@ You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-t
 
 ## License
 
-MIT (C) Russell Steadman
+MIT (C) Russell Steadman. Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
 
 ## Support Me
 
