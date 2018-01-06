@@ -33,4 +33,4 @@ MIT (C) Russell Steadman
 
 ## Support Me
 
-Like this project? Buy me a [cup of coffee](https://www.paypal.me/RussellSteadman/3). ;)
+Like this project? Buy me a [cup of coffee](https://www.paypal.me/RussellSteadman/3). &#x2615; Here are more of my [projects](https://teamtofu.github.io/).

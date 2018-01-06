@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/teamtofu/affiliate.git",
   "homepage": "https://affiliate.js.org/",
-  "author": "Russell Steadman <russell@unatetra.com> (https://unatetra.com/)",
+  "author": "Russell Steadman <russell@unatetra.com> (https://teamtofu.github.io/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/teamtofu/affiliate/issues",
