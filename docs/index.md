@@ -1,6 +1,8 @@
 # Affiliate
 Affiliate is a platform agnostic link affiliator. Simplify affiliating links with automatic affiliation in the browser. Affiliate works with libraries that mutate the DOM after the page loads, including React.
 
+[![NPM](https://nodei.co/npm/affiliate.png)](https://www.npmjs.com/package/affiliate)
+
 ## Installation
 
 With NPM
@@ -16,6 +18,11 @@ $ yarn add affiliate
 With a CDN
 ```html
 <script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
+```
+
+With Bower
+```bash
+$ bower install -S affiliate
 ```
 
 ## Configuration
@@ -44,7 +51,7 @@ var aff = Affiliate({
                 return path + '-tag';
             },
             modifyHost: function (host) { // a function that returns a new host
-                return host + '.rdr.example.com';
+                return host.split(':')[0] + '.rdr.example.com';
             }
         }
     ]
@@ -99,7 +106,7 @@ You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-t
 
 ## License
 
-MIT (C) Russell Steadman. Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
 
 ## Support Me
 

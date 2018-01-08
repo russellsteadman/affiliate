@@ -23,13 +23,35 @@ With Bower
 $ bower install -S affiliate
 ```
 
+## What It Can Do
+
+Affiliate can modify the following link into any of the others.
+```html
+<a href="https://example.com/shop/product/item-id">Buy this item</a>
+```
+
+Query tags:
+```html
+<a href="https://example.com/shop/product/item-id?ref=my-tag">Buy this item</a>
+```
+
+URL Path:
+```html
+<a href="https://example.com/shop/product/item-id/ref/my-tag">Buy this item</a>
+```
+
+Host Name:
+```html
+<a href="https://my-tag.example.com/shop/product/item-id">Buy this item</a>
+```
+
 ## Documentation
 
-[Read it!](https://teamtofu.github.io/affiliate/)
+[Read it!](https://affiliate.js.org/)
 
 ## License
 
-MIT (C) Russell Steadman
+MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
 
 ## Support Me
 
