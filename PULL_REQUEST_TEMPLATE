@@ -1,5 +1,12 @@
 Reason for pull request: 
 
-* If this request is for a new plugin, make sure the request only edits docs/plugins/index.md and adds your documentation
+## If you are adding a plugin:
+
+What is your package's name? 
+
+Requirements:
+* The request only edits docs/plugins/index.md and your documentation file in docs/plugins
+* Your code is already published to NPM
+* Your code is published under a MIT license (or similar)
 
 Thanks :thumbsup:
