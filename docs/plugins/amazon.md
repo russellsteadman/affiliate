@@ -54,7 +54,7 @@ Or url modification can be disabled:
 ## Documentation
 
 ```js
-var AffiliatePluginAmazon = require('affiliate-plugin-amazon'); 
+var Affiliate = require('affiliate'); 
 var AffiliatePluginAmazon = require('affiliate-plugin-amazon'); 
 
 var amazonAff = AffiliatePluginAmazon(Affiliate, {
