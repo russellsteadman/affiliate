@@ -40,7 +40,6 @@
     "advertisement"
   ],
   "scripts": {
-    "build": "webpack",
-    "test": "sh ./test/test.sh"
+    "build": "webpack"
   }
 }

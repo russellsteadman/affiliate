@@ -49,6 +49,10 @@ Host Name:
 
 [Read it!](https://affiliate.js.org/)
 
+## Plugins
+
+* [Amazon](https://affiliate.js.org/plugins/amazon)
+
 ## License
 
 MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
