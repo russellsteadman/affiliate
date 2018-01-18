@@ -104,6 +104,10 @@ Will become...
 You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-tag-20">Chocolate Passport</a>.
 ```
 
+## Plugins
+
+Plugins make some more complex affiliation tasks super simple. Check out a list [here](https://affiliate.js.org/plugins), and [learn to make your own](https://affiliate.js.org/plugins).
+
 ## License
 
 MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.

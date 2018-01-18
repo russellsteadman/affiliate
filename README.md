@@ -45,13 +45,11 @@ Host Name:
 <a href="https://my-tag.example.com/shop/product/item-id">Buy this item</a>
 ```
 
+Affiliate has easy [plugins](https://affiliate.js.org/plugins), such as one for [Amazon](https://affiliate.js.org/plugins/amazon), which simplify adding affiliate links even more.
+
 ## Documentation
 
 [Read it!](https://affiliate.js.org/)
-
-## Plugins
-
-* [Amazon](https://affiliate.js.org/plugins/amazon)
 
 ## License
 
