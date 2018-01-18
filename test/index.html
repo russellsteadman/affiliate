@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Affiliate Test Suite</title>
-    <script src="suite.js"></script>
+    <script src="/dist/affiliate.js"></script>
     <script>
         var aff = Affiliate({
             log: true,
@@ -42,10 +42,15 @@
             a.innerHTML = 'Link';
             mut.appendChild(a);
         };
+        window.relink = function () {
+            var a = document.getElementById("change");
+            a.setAttribute('href', 'https://example.com/test/dnjsb');
+        };
     </script>
 </head>
 <body>
-    <a href="https://example.com/test/dnjsb">Link</a>
+    <button onclick="relink();">Relink</button>
+    <a id="change" href="https://example.com/test/dnjsb">Link</a>
     <a href="/test/dnjsb">Link</a>
     <div>
         <span><a href="https://example.com/test/ref-tag/ref-regex2/?stuff=2#cool">Link</a></span>

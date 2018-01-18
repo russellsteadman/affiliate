@@ -1,14 +1,27 @@
 var parseURL = require('url-parse');
 
 var inst = [];
+var linkStore = {};
 
-var log = function (err, info) {
-    if (err) {
-        console.error('Affiliate: ', info)
-    } else {
-        console.log('Affiliate: ', info);
-    }
+var getLink = function (node) {
+    return linkStore[node.dataset.affId] || {};
 };
+
+var setLink = function (node, href, to) {
+    var id = '';
+    for (var o = 0; o < 3; o += 1) {
+        id += Math.floor((1 + Math.random()) * 65536).toString(16).substring(1);
+    }
+    if (node.dataset.affId) id = node.dataset.affId;
+    node.dataset.affId = id;
+    linkStore[id] = {
+        href: href,
+        to: to
+    };
+};
+
+var log = console.log.bind(window, 'Affiliate: ');
+var error = console.error.bind(window, 'Affiliate: ');
 
 var Affiliate = function (config) {
     config = Object.assign({
@@ -31,9 +44,10 @@ var Affiliate = function (config) {
     if (typeof MutationObserver === 'undefined') extendedMode = false;
 
     var traverseNodes = function (nodeSet) {
-        if (config.log) log(false, 'Traversing DOM...');
+        if (config.log) log('Traversing DOM...');
         var nodes = [].slice.call(nodeSet.getElementsByTagName('a'));
-        if (config.log) log(false, nodes);
+        if (nodeSet.nodeName.toLowerCase() === 'a') nodes = [nodeSet];
+        if (config.log) log(nodes);
         for (var i in nodes) checkURL(nodes[i]);
     };
 
@@ -49,36 +63,38 @@ var Affiliate = function (config) {
     };
 
     var modifyURL = function (url, node, tag) {
-        if (node.dataset && node.dataset.modified === 'true') return;
+        if (getLink(node).to === url.href) return;
         var originalURL = url.href;
-        if (config.log) log(false, 'Discovered URL: ' + url.href);
+        if (config.log) log('Discovered URL: ' + url.href);
         url.set('query', Object.assign(url.query, tag.query));
         if (typeof tag.modifyPath === 'function') {
             try {
                 url.set('pathname', tag.modifyPath(url.pathname));
-            } catch (e) {log(true, e);}
+            } catch (e) {error(e);}
         }
         if (typeof tag.modifyHost === 'function') {
             try {
                 url.set('host', tag.modifyHost(url.host));
-            } catch (e) {log(true, e);}
+            } catch (e) {error(e);}
         }
         var urlRaw = url.href;
         for (var i in tag.replace) {
             urlRaw = urlRaw.replace(tag.replace[i].from, tag.replace[i].to);
         }
         node.setAttribute('href', urlRaw);
-        if (node.dataset) {
-            node.dataset.originalHref = originalURL;
-            node.dataset.modified = 'true';
-        }
+        setLink(node, originalURL, urlRaw);
     };
 
     if (extendedMode) {
         this.observer = new MutationObserver(function(mutations) {
-            log(false, 'DOM Mutation');
+            if (config.log) log('DOM Mutation', mutations);
             for (var i in mutations) {
-                if (mutations[i].attributeName && mutations[i].attributeName !== 'href') continue;
+                if (mutations[i].type === 'attributes') {
+                    if (mutations[i].attributeName !== 'href') continue;
+                    var href = mutations[i].target.getAttribute('href');
+                    var old = getLink(mutations[i].target).to;
+                    if (old && old === href) continue;
+                }
                 traverseNodes(mutations[i].target);
             }
         });
@@ -98,16 +114,16 @@ var Affiliate = function (config) {
                 characterData: true
             });
         } else if (config.log) {
-            log(true, 'Browser does not support MutationObserver.');
+            error('Browser does not support MutationObserver.');
         }
     }.bind(this);
 
     this.detach = function () {
         if (extendedMode) {
-            log(false, 'Observer disconnected.');
+            if (config.log) log('Observer disconnected.');
             this.observer.disconnect();
         } else if (config.log) {
-            log(true, 'Nothing to detach.');
+            error('Nothing to detach.');
         }
     }.bind(this);
 };
@@ -134,10 +150,9 @@ module.exports.revert = function () {
     }
     var nodes = [].slice.call(document.body.getElementsByTagName('a'));
     for (var i in nodes) {
-        if (nodes[i].dataset && nodes[i].dataset.modified === 'true') {
-            nodes[i].setAttribute('href', nodes[i].dataset.originalHref);
-            delete nodes[i].dataset.originalHref;
-            delete nodes[i].dataset.modified;
+        if (nodes[i].dataset.affId) {
+            nodes[i].setAttribute('href', getLink(nodes[i]).href);
+            delete nodes[i].dataset.affId;
         }
     };
 };
