@@ -1,31 +1,21 @@
 # AffiliatePluginAmazon
-This plugin for open source [Affiliate package](https://github.com/teamtofu/affiliate) automatically affiliates Amazon URLs based upon locality.
+This plugin automatically affiliates Amazon URLs based upon locality.
 
 ## Affiliate Main Package
 
-Make sure [Affiliate](https://affiliate.js.org/) is already installed.
+Make sure [Affiliate](https://affiliate.js.org/) is already installed. Read the documentation [here](https://affiliate.js.org/).
 
 ## Installation
 
-With NPM
 ```bash
 $ npm i -S affiliate-plugin-amazon
-```
-
-With Yarn
-```bash
 $ yarn add affiliate-plugin-amazon
-```
-
-With a CDN
-```html
-<script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
-<script src="https://unpkg.com/affiliate-plugin-amazon@latest/dist/plugin.js"></script>
-```
-
-With Bower
-```bash
 $ bower install -S affiliate-plugin-amazon
+```
+
+Or With A CDN
+```html
+<script src="https://unpkg.com/affiliate-plugin-amazon@latest/dist/plugin.js"></script>
 ```
 
 ## What It Can Do

@@ -1,6 +1,6 @@
 {
   "name": "affiliate",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "A platform agnostic tool to quickly add affiliate links onto your website",
   "main": "index.js",
   "repository": "https://github.com/teamtofu/affiliate.git",
@@ -15,31 +15,32 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators": "^6.24.1",
-    "babel-plugin-transform-react-constant-elements": "^6.23.0",
-    "babel-plugin-transform-react-inline-elements": "^6.22.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "uglifyjs-webpack-plugin": "^1.1.5",
-    "url-parse": "^1.2.0",
-    "webpack": "^3.10.0"
+    "eslint": "^4.17.0",
+    "eslint-plugin-compat": "^2.2.0",
+    "webpack": "^3.10.0",
+    "webpack-closure-compiler": "^2.1.6"
   },
   "keywords": [
     "affiliate",
     "amazon",
-    "viglink",
-    "link",
     "affiliation",
-    "refer",
+    "advertising",
     "referral",
     "marketing",
-    "adwords",
+    "associate",
     "ads",
-    "advertisement"
+    "advertisement",
+    "program",
+    "querystring",
+    "tag",
+    "ecommerce"
   ],
   "scripts": {
-    "build": "webpack"
+    "build": "webpack && webpack --config docs/test/webpack/webpack.config.js"
+  },
+  "dependencies": {
+    "docile": "^1.1.0",
+    "url-parse": "^1.2.0"
   }
 }

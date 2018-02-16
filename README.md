@@ -3,53 +3,60 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 
 ## Installation
 
-With NPM
 ```bash
 $ npm i -S affiliate
-```
-
-With Yarn
-```bash
 $ yarn add affiliate
+$ bower install -S affiliate
 ```
 
-With a CDN
+Or use the Unpkg CDN
 ```html
 <script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
-```
-
-With Bower
-```bash
-$ bower install -S affiliate
 ```
 
 ## What It Can Do
 
 Affiliate can modify the following link into any of the others.
 ```html
-<a href="https://example.com/shop/product/item-id">Buy this item</a>
+<a href="https://example.com/shop/product/item-id">Original</a>
 ```
 
-Query tags:
 ```html
-<a href="https://example.com/shop/product/item-id?ref=my-tag">Buy this item</a>
-```
-
-URL Path:
-```html
-<a href="https://example.com/shop/product/item-id/ref/my-tag">Buy this item</a>
-```
-
-Host Name:
-```html
-<a href="https://my-tag.example.com/shop/product/item-id">Buy this item</a>
+<a href="https://example.com/shop/product/item-id?ref=my-tag">New Query Tags</a>
+<a href="https://example.com/shop/product/item-id/ref/my-tag">Modified URL Path</a>
+<a href="https://my-tag.example.com/shop/product/item-id">Modified Host Name</a>
 ```
 
 Affiliate has easy [plugins](https://affiliate.js.org/plugins), such as one for [Amazon](https://affiliate.js.org/plugins/amazon), which simplify adding affiliate links even more.
 
+## Basic Setup
+
+Read [the documentation](https://affiliate.js.org/) for more advanced usage.
+
+```js
+// var Affiliate = require('affiliate');
+var aff = Affiliate({
+    tags: [
+        {
+            hosts: ['example.com', 'www.example.com'],
+            query: {
+                ref: 'my-tag' // ?ref=my-tag
+            }
+        },
+        {
+            hosts: ['example.org', 'shop.example.org'],
+            query: {
+                tag: 'my-tag2' // ?tag=my-tag2
+            }
+        }
+    ]
+});
+aff.attach();
+```
+
 ## Documentation
 
-[Read it!](https://affiliate.js.org/)
+Affiliate is simple and quick to set up, even for more complex usage. Read the docs at: [affiliate.js.org](https://affiliate.js.org/).
 
 ## License
 

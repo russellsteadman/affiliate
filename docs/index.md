@@ -5,24 +5,15 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 
 ## Installation
 
-With NPM
 ```bash
 $ npm i -S affiliate
-```
-
-With Yarn
-```bash
 $ yarn add affiliate
+$ bower install -S affiliate
 ```
 
-With a CDN
+Or Use A CDN
 ```html
 <script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
-```
-
-With Bower
-```bash
-$ bower install -S affiliate
 ```
 
 ## Configuration
@@ -107,6 +98,10 @@ You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-t
 ## Plugins
 
 Plugins make some more complex affiliation tasks super simple. Check out a list [here](https://affiliate.js.org/plugins), and [learn to make your own](https://affiliate.js.org/plugins).
+
+## Testing
+
+Affiliate is tested using Jasmine. The test of the minified packages is available [here](/test/index.html) and the webpack package [here](/test/webpack.html).
 
 ## License
 

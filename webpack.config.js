@@ -1,5 +1,6 @@
+/* global __dirname */
 var path = require('path');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var ClosureCompilerPlugin = require('webpack-closure-compiler');
 
 module.exports = {
   entry: './src/index.js',
@@ -7,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'), 
     filename: 'affiliate.js',
     library: 'Affiliate',
-    libraryTarget: 'umd'
+    libraryTarget: 'window'
   },
 
   module: {
@@ -19,15 +20,13 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     presets: [
-                        "env",
-                        "react",
-                        "stage-0"
+                      ['env', {
+                        'targets': {
+                          'browsers': ['last 4 versions', 'safari >= 7', 'ie >= 9']
+                        }
+                      }]
                     ],
                     plugins: [
-                        "transform-class-properties",
-                        "transform-decorators",
-                        "transform-react-constant-elements",
-                        "transform-react-inline-elements"
                     ]
                 }
             }
@@ -40,7 +39,7 @@ module.exports = {
       'node_modules',
       path.resolve(__dirname, 'src')
     ],
-    extensions: ['.js', '.json', '.jsx', '.css']
+    extensions: ['.js', '.json']
   },
 
   performance: {
@@ -54,6 +53,14 @@ module.exports = {
   context: __dirname,
   target: 'web',
   plugins: [
-    new UglifyJsPlugin()
+    new ClosureCompilerPlugin({
+      compiler: {
+        language_in: 'ECMASCRIPT5',
+        language_out: 'ECMASCRIPT5',
+        compilation_level: 'SIMPLE'
+      },
+      // jsCompiler: true, // use this if there are issues with building
+      concurrency: 4
+    })
   ]
 }

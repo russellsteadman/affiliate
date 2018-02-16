@@ -1,37 +1,32 @@
 var parseURL = require('url-parse');
+var Docile = require('docile');
 
-var inst = [];
-var linkStore = {};
+var instanceList = [];
 
-var getLink = function (node) {
-    return linkStore[node.dataset.affId] || {};
-};
+var assign = function () {
+    var combo = {};
 
-var setLink = function (node, href, to) {
-    var id = '';
-    for (var o = 0; o < 3; o += 1) {
-        id += Math.floor((1 + Math.random()) * 65536).toString(16).substring(1);
+    for (var i in arguments) {
+        for (var o in arguments[i]) {
+            combo[o] = arguments[i][o];
+        }
     }
-    if (node.dataset.affId) id = node.dataset.affId;
-    node.dataset.affId = id;
-    linkStore[id] = {
-        href: href,
-        to: to
-    };
+
+    return combo;
 };
 
 var log = console.log.bind(window, 'Affiliate: ');
 var error = console.error.bind(window, 'Affiliate: ');
 
 var Affiliate = function (config) {
-    config = Object.assign({
+    config = assign({
         log: false,
         tags: []
     }, config);
 
     var hosts = [];
     for (var i in config.tags) {
-        config.tags[i] = Object.assign({
+        config.tags[i] = assign({
             hosts: [],
             query: {},
             replace: []
@@ -40,6 +35,7 @@ var Affiliate = function (config) {
     }
 
     var extendedMode = true;
+    var attached = false;
     var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
     if (typeof MutationObserver === 'undefined') extendedMode = false;
 
@@ -56,17 +52,26 @@ var Affiliate = function (config) {
         var url = parseURL(node.getAttribute('href') || '', true);
         if (hosts.indexOf(url.host) === -1) return;
         for (var i in config.tags) {
-            if (config.tags[i].hosts.indexOf(url.host) !== -1) {
+            if (config.tags[i].hosts.indexOf(url.host) >= 0) {
                 modifyURL(url, node, config.tags[i]);
             }
         }
     };
 
     var modifyURL = function (url, node, tag) {
-        if (getLink(node).to === url.href) return;
+        // Check if URL is already modified.
+        var linkData = Docile.get(node) || {};
+        if (linkData.to && linkData.to === url.href) return;
+
+        // Preserve the original URL.
         var originalURL = url.href;
+
         if (config.log) log('Discovered URL: ' + url.href);
-        url.set('query', Object.assign(url.query, tag.query));
+
+        // Change query variables.
+        url.set('query', assign(url.query, tag.query));
+
+        // Run the modification functions.
         if (typeof tag.modifyPath === 'function') {
             try {
                 url.set('pathname', tag.modifyPath(url.pathname));
@@ -77,12 +82,19 @@ var Affiliate = function (config) {
                 url.set('host', tag.modifyHost(url.host));
             } catch (e) {error(e);}
         }
+
+        // Replace certain parts of the url
         var urlRaw = url.href;
         for (var i in tag.replace) {
             urlRaw = urlRaw.replace(tag.replace[i].from, tag.replace[i].to);
         }
+
+        // Update the href tag
         node.setAttribute('href', urlRaw);
-        setLink(node, originalURL, urlRaw);
+        Docile.set(node, {
+            href: originalURL,
+            to: urlRaw
+        });
     };
 
     if (extendedMode) {
@@ -92,8 +104,8 @@ var Affiliate = function (config) {
                 if (mutations[i].type === 'attributes') {
                     if (mutations[i].attributeName !== 'href') continue;
                     var href = mutations[i].target.getAttribute('href');
-                    var old = getLink(mutations[i].target).to;
-                    if (old && old === href) continue;
+                    var linkData = Docile.get(mutations[i].target) || {};
+                    if (linkData.to && linkData.to === href) continue;
                 }
                 traverseNodes(mutations[i].target);
             }
@@ -101,10 +113,12 @@ var Affiliate = function (config) {
     }
 
     this.attach = function () {
+        if (attached) return;
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            attached = true;
             traverseNodes(document.body);
         } else {
-            return document.addEventListener('DOMContentLoaded', this.attach);
+            return window.addEventListener('DOMContentLoaded', this.attach);
         }
         if (extendedMode) {
             this.observer.observe(document.body, {
@@ -114,45 +128,44 @@ var Affiliate = function (config) {
                 characterData: true
             });
         } else if (config.log) {
-            error('Browser does not support MutationObserver.');
+            log('Browser does not support MutationObserver.');
         }
     }.bind(this);
 
     this.detach = function () {
-        if (extendedMode) {
-            if (config.log) log('Observer disconnected.');
-            this.observer.disconnect();
-        } else if (config.log) {
-            error('Nothing to detach.');
-        }
+        if (!extendedMode) return;
+        attached = false;
+        this.observer.disconnect();
+        if (config.log) log('Observer disconnected.');
     }.bind(this);
 };
 
-module.exports = function (config) {
-    var aff = new Affiliate(config);
-    inst.push(aff);
-    return aff;
+var out = function (config) {
+    var Instance = new Affiliate(config);
+    instanceList.push(Instance);
+    return Instance;
 };
 
-module.exports.instances = function () {
-    return [].concat(inst);
+out.instances = function () {
+    return [].concat(instanceList);
 };
 
-module.exports.detachAll = function () {
-    for (var i in inst) {
-        inst[i].detach();
+out.detachAll = function () {
+    for (var i in instanceList) {
+        instanceList[i].detach();
     }
 };
 
-module.exports.revert = function () {
-    for (var i in inst) {
-        inst[i].detach();
-    }
+out.revert = function () {
+    this.detachAll();
     var nodes = [].slice.call(document.body.getElementsByTagName('a'));
     for (var i in nodes) {
-        if (nodes[i].dataset.affId) {
-            nodes[i].setAttribute('href', getLink(nodes[i]).href);
-            delete nodes[i].dataset.affId;
+        var linkData = Docile.get(nodes[i]);
+        if (linkData && linkData.href) {
+            nodes[i].setAttribute('href', linkData.href);
+            Docile.set(nodes[i], {});
         }
-    };
-};
+    }
+}.bind(out);
+
+module.exports = out;

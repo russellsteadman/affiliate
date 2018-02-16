@@ -1,1 +1,1 @@
-module.exports = require('./dist/affiliate');
+module.exports = require('./src/index');
