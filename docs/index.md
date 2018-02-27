@@ -103,6 +103,16 @@ Plugins make some more complex affiliation tasks super simple. Check out a list 
 
 Affiliate is tested using Jasmine. The test of the minified packages is available [here](/test/index.html) and the webpack package [here](/test/webpack.html).
 
+### Big Thanks
+
+<div style="text-align:center; width: 100%;">
+    <a href="https://saucelabs.com/">
+        <img src="https://affiliate.js.org/test/sauce/saucelabs.png" alt="Sauce Labs"/>
+    </a>
+</div>
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com/)!
+
 ## License
 
 MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
