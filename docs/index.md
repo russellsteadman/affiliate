@@ -105,11 +105,7 @@ Affiliate is tested using Jasmine. The test of the minified packages is availabl
 
 ### Big Thanks
 
-<div style="text-align:center; width: 100%;">
-    <a href="https://saucelabs.com/">
-        <img src="https://affiliate.js.org/test/sauce/saucelabs.png" alt="Sauce Labs"/>
-    </a>
-</div>
+[![Sauce Labs](https://affiliate.js.org/test/sauce/saucelabs.png)](https://saucelabs.com/)
 
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com/)!
 
