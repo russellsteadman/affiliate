@@ -37,7 +37,9 @@
     "ecommerce"
   ],
   "scripts": {
-    "build": "webpack && webpack --config docs/test/webpack/webpack.config.js"
+    "build": "webpack && webpack --config docs/test/webpack/webpack.config.js",
+    "test-cred": "sh ./docs/test/sauce/cred.sh",
+    "test": "sh ./docs/test/sauce/run.sh"
   },
   "dependencies": {
     "docile": "^1.1.0",

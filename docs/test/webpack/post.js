@@ -134,10 +134,14 @@ var Affiliate = function (config) {
 
     var traverseNodes = function (nodeSet) {
         if (config.log) log('Traversing DOM...');
-        var nodes = [].slice.call(nodeSet.getElementsByTagName('a'));
+        var collection = nodeSet.getElementsByTagName('a');
+        var nodes = [];
+        for (var i in collection) {
+            if (collection.hasOwnProperty(i)) nodes[i] = collection[i];
+        }
         if (nodeSet.nodeName.toLowerCase() === 'a') nodes = [nodeSet];
         if (config.log) log(nodes);
-        for (var i in nodes) checkURL(nodes[i]);
+        for (var o in nodes) checkURL(nodes[o]);
     };
 
     var checkURL = function (node) {
