@@ -43,7 +43,7 @@
     "test-webpack": "sh ./docs/test/sauce/run-webpack.sh"
   },
   "dependencies": {
-    "docile": "^1.1.1 >=1.1.1",
+    "docile": "^1.1.2 >=1.1.2",
     "url-parse": "^1.2.0"
   }
 }

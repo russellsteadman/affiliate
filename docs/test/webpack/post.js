@@ -112,6 +112,7 @@ var log = function (isError) {
     if (console && console.log && console.error) {
         var args = Array.prototype.slice.call(arguments, 1);
         var logFunc = isError ? console.error : console.log;
+        logFunc = Function.prototype.bind.call(logFunc, console);
         logFunc.apply(console, ['[Affiliate] '].concat(args));
     }
 };
@@ -876,7 +877,9 @@ var bindTo = function (func, context) {
 
 var error = function () {
     if (console && console.error) {
-        bindTo(console.error, console, 'Docile: ')(arguments);
+        var args = Array.prototype.slice.call(arguments);
+        var logFunc = Function.prototype.bind.call(console.error, console);
+        logFunc.apply(console, ['[Docile] '].concat(args));
     }
 };
 

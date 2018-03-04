@@ -19,6 +19,7 @@ var log = function (isError) {
     if (console && console.log && console.error) {
         var args = Array.prototype.slice.call(arguments, 1);
         var logFunc = isError ? console.error : console.log;
+        logFunc = Function.prototype.bind.call(logFunc, console);
         logFunc.apply(console, ['[Affiliate] '].concat(args));
     }
 };
