@@ -16,7 +16,7 @@ var assign = function () {
 };
 
 var log = function (isError) {
-    if (console && typeof console === 'object') {
+    if (typeof console === 'object') {
         var args = Array.prototype.slice.call(arguments, 1);
         var logFunc = isError ? console.error : console.log;
         logFunc = Function.prototype.bind.call(logFunc, console);

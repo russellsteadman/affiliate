@@ -109,7 +109,7 @@ var assign = function () {
 };
 
 var log = function (isError) {
-    if (console && typeof console === 'object') {
+    if (typeof console === 'object') {
         var args = Array.prototype.slice.call(arguments, 1);
         var logFunc = isError ? console.error : console.log;
         logFunc = Function.prototype.bind.call(logFunc, console);
@@ -876,7 +876,7 @@ var bindTo = function (func, context) {
 };
 
 var error = function () {
-    if (console && console.error) {
+    if (typeof console === 'object') {
         var args = Array.prototype.slice.call(arguments);
         var logFunc = Function.prototype.bind.call(console.error, console);
         logFunc.apply(console, ['[Docile] '].concat(args));
