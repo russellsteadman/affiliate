@@ -1,8 +1,4 @@
-/* eslint-disable */
-window.main = function () {location.replace('index.html');};
-window.webpack = function () {location.replace('webpack.html');};
-if (console && console.log) console.log('To view the main tests, type "main()". To view the webpack tests type "webpack()".');
-
+/* global it, describe, Affiliate, expect */
 var optionOne = {
     log: true,
     tags: [
