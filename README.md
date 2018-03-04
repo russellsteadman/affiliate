@@ -60,7 +60,7 @@ Affiliate is simple and quick to set up, even for more complex usage. Read the d
 
 ## Testing
 
-Affiliate is tested using Jasmine. The test of the minified packages is available [here](/test/index.html) and the webpack package [here](/test/webpack.html).
+Affiliate is tested using Jasmine. The test of the minified packages is available [here](https://affiliate.js.org/test/index.html) and the webpack package [here](https://affiliate.js.org/test/webpack.html).
 
 ### Big Thanks
 

@@ -1178,9 +1178,9 @@ diffie-hellman@^5.0.0:
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
 
-docile@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/docile/-/docile-1.1.0.tgz#11b539d4ca19c7c134361fa8ba8f37984c44ab8c"
+"docile@^1.1.1 >=1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/docile/-/docile-1.1.1.tgz#7f9afcd3345ac39e0ceccba2d0da903a28fba2ac"
 
 doctrine@^2.1.0:
   version "2.1.0"

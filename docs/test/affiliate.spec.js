@@ -113,3 +113,5 @@ describe('Affiliate instances', function () {
         Affiliate.revert();
     });
 });
+
+window.jasmine.getEnv().addReporter(new window.jasmine.JSReporter2());

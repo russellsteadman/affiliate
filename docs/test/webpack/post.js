@@ -849,15 +849,35 @@ module.exports = __webpack_require__(8);
 /* 8 */
 /***/ (function(module, exports) {
 
-var error = console.error.bind(this, 'Docile: ');
-
 var domReady = ['loaded', 'interactive', 'complete'].indexOf(document.readyState) >= 0;
 
+var attrId = 'data-docile-id';
+var attrStore = 'data-docile-store';
+
+var nativeBind = Function.prototype.bind;
+var slice = Array.prototype.slice;
+
+var bindTo = function (func, context) {
+    if (nativeBind && func.bind === nativeBind) {
+        return nativeBind.apply(func, slice.call(arguments, 1));
+    }
+    var args = slice.call(arguments, 2);
+    return function () {
+        return func.apply(context, args.concat(slice.call(arguments)));
+    };
+};
+
+var error = function () {
+    if (console && console.error) {
+        bindTo(console.error, console, 'Docile: ')(arguments);
+    }
+};
+
 var createId = function (node) {
-    var id = node.dataset.docileId;
+    var id = node.getAttribute(attrId);
     if (!id) {
         id = Math.random().toString(36).substr(2);
-        node.dataset.docileId = id;
+        node.setAttribute(attrId, id);
         return id;
     }
     return id;
@@ -878,14 +898,14 @@ var findNode = function (node) {
 };
 
 var findById = function (id) {
-    return document.querySelector('[data-docile-id="' + id + '"]');
+    return document.querySelector('[' + attrId + '="' + id + '"]');
 };
 
 var revive = function () {
     var data = {store:{},linkStore:{}};
-    if (!document.head.dataset.docileStore) document.head.dataset.docileStore = '{"store":{},"linkStore":{}}';
+    if (!document.head.getAttribute(attrStore)) document.head.setAttribute(attrStore, '{"store":{},"linkStore":{}}');
     try {
-        data = JSON.parse(document.head.dataset.docileStore);
+        data = JSON.parse(document.head.getAttribute(attrStore));
     } catch (e) {
         error('Data could not be resumed.');
     }
@@ -894,7 +914,7 @@ var revive = function () {
 
 var persist = function (storeData, linkStoreData) {
     try {
-        document.head.dataset.docileStore = JSON.stringify({store: storeData, linkStore: linkStoreData});
+        document.head.setAttribute(attrStore, JSON.stringify({store: storeData, linkStore: linkStoreData}));
     } catch (e) {
         error('Data could not be saved.');
     }
@@ -937,11 +957,11 @@ var getLink = function (main, alias) {
         if (typeof alias !== 'string') return error('Link name must be a string.');
         return findById(main.linkStore[this.id][alias]);
     } else {
-        var listLinks = Object.assign({}, main.linkStore[this.id]);
-        for (var i in listLinks) {
-            listLinks[i] = findById(listLinks[i]);
+        var links = {};
+        for (var i in main.linkStore[this.id]) {
+            links[i] = findById(main.linkStore[this.id][i]);
         }
-        return listLinks;
+        return links;
     }
 };
 
@@ -963,9 +983,9 @@ var link = function (node) {
     var id = createId(node);
     var DocileLink = new Object();
     DocileLink.id = id;
-    DocileLink.set = setLink.bind(DocileLink, this);
-    DocileLink.get = getLink.bind(DocileLink, this);
-    DocileLink.getData = getLinkData.bind(DocileLink, this);
+    DocileLink.set = bindTo(setLink, DocileLink, this);
+    DocileLink.get = bindTo(getLink, DocileLink, this);
+    DocileLink.getData = bindTo(getLinkData, DocileLink, this);
     return DocileLink;
 };
 
@@ -979,16 +999,16 @@ var Docile = new Object();
 /**
  * @param {(string|Object)} node - The DOM node or node id
  */
-Docile.get = get.bind(Docile);
+Docile.get = bindTo(get, Docile);
 /**
  * @param {(string|Object)} node - The DOM node or node id
  * @param {*} data - The data to be stored
  */
-Docile.set = set.bind(Docile);
+Docile.set = bindTo(set, Docile);
 /**
  * @param {(string|Object)} node - The DOM node for accessing a link
  */
-Docile.link = link.bind(Docile);
+Docile.link = bindTo(link, Docile);
 
 var initialData = revive();
 Docile.store = initialData.store || {};
