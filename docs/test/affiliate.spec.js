@@ -1,7 +1,7 @@
 /* eslint-disable */
 window.main = function () {location.replace('index.html');};
 window.webpack = function () {location.replace('webpack.html');};
-console.log('To view the main tests, type "main()". To view the webpack tests type "webpack()".');
+if (console && console.log) console.log('To view the main tests, type "main()". To view the webpack tests type "webpack()".');
 
 var optionOne = {
     log: true,
@@ -86,7 +86,6 @@ describe('Affiliate instances', function () {
         var aff = Affiliate(optionOne);
         expect(typeof aff.attach).toEqual('function');
         expect(typeof aff.detach).toEqual('function');
-        expect(typeof aff.observer).toEqual('object');
     });
     it('can attach and detach', function () {
         var aff = Affiliate(optionOne);
