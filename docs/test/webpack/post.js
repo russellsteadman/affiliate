@@ -108,8 +108,32 @@ var assign = function () {
     return combo;
 };
 
-var log = console.log.bind(window, 'Affiliate: ');
-var error = console.error.bind(window, 'Affiliate: ');
+var nativeBind = Function.prototype.bind;
+var slice = Array.prototype.slice;
+
+var bindTo = function (func, context) {
+    if (nativeBind && func.bind === nativeBind) {
+        return nativeBind.apply(func, slice.call(arguments, 1));
+    }
+    var args = slice.call(arguments, 2);
+    return function () {
+        return func.apply(context, args.concat(slice.call(arguments)));
+    };
+};
+
+var logPrepend = '[Affiliate] ';
+
+var log = function () {
+    if (console && console.log) {
+        bindTo(console.error, console, logPrepend)(arguments);
+    }
+};
+
+var error = function () {
+    if (console && console.error) {
+        bindTo(console.error, console, logPrepend)(arguments);
+    }
+};
 
 var Affiliate = function (config) {
     config = assign({
@@ -209,7 +233,7 @@ var Affiliate = function (config) {
         });
     }
 
-    this.attach = function () {
+    this.attach = bindTo(function () {
         if (attached) return;
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             attached = true;
@@ -227,14 +251,14 @@ var Affiliate = function (config) {
         } else if (config.log) {
             log('Browser does not support MutationObserver.');
         }
-    }.bind(this);
+    }, this);
 
-    this.detach = function () {
+    this.detach = bindTo(function () {
         if (!extendedMode) return;
         attached = false;
         this.observer.disconnect();
         if (config.log) log('Observer disconnected.');
-    }.bind(this);
+    }, this);
 };
 
 var out = function (config) {
@@ -253,7 +277,7 @@ out.detachAll = function () {
     }
 };
 
-out.revert = function () {
+out.revert = bindTo(function () {
     this.detachAll();
     var nodes = [].slice.call(document.body.getElementsByTagName('a'));
     for (var i in nodes) {
@@ -263,7 +287,7 @@ out.revert = function () {
             Docile.set(nodes[i], {});
         }
     }
-}.bind(out);
+}, out);
 
 module.exports = out;
 
