@@ -1,6 +1,6 @@
 /* global __dirname */
 var path = require('path');
-var ClosureCompilerPlugin = require('webpack-closure-compiler');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -53,14 +53,12 @@ module.exports = {
   context: __dirname,
   target: 'web',
   plugins: [
-    new ClosureCompilerPlugin({
-      compiler: {
-        language_in: 'ECMASCRIPT5',
-        language_out: 'ECMASCRIPT5',
-        compilation_level: 'SIMPLE'
-      },
-      // jsCompiler: true, // use this if there are issues with building
-      concurrency: 4
+    new UglifyJsPlugin({
+      uglifyOptions: {
+        compress: {
+          passes: 3
+        }
+      }
     })
   ]
 }

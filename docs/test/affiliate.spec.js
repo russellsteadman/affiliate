@@ -1,4 +1,5 @@
 /* global it, describe, Affiliate, expect */
+
 var optionOne = {
     log: true,
     tags: [

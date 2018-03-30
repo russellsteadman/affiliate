@@ -30,15 +30,21 @@ var Affiliate = function (config) {
         tags: []
     }, config);
 
+    var noop = function (a) {return a;};
+
     var hosts = [];
     for (var i in config.tags) {
         config.tags[i] = assign({
             hosts: [],
             query: {},
-            replace: []
+            replace: [],
+            modifyHost: noop,
+            modifyPath: noop
         }, config.tags[i]);
         hosts = hosts.concat(config.tags[i].hosts);
     }
+
+    if (config.log) log(false, 'New Instance', config);
 
     var extendedMode = true;
     var attached = false;
@@ -53,7 +59,6 @@ var Affiliate = function (config) {
             if (collection.hasOwnProperty(i)) nodes[i] = collection[i];
         }
         if (nodeSet.nodeName.toLowerCase() === 'a') nodes = [nodeSet];
-        if (config.log) log(false, nodes);
         for (var o in nodes) checkURL(nodes[o]);
     };
 
@@ -109,7 +114,7 @@ var Affiliate = function (config) {
 
     if (extendedMode) {
         this.observer = new MutationObserver(function(mutations) {
-            if (config.log) log(false, 'DOM Mutation', mutations);
+            if (config.log) log(false, 'DOM Mutation');
             for (var i in mutations) {
                 if (mutations[i].type === 'attributes') {
                     if (mutations[i].attributeName !== 'href') continue;
@@ -137,7 +142,8 @@ var Affiliate = function (config) {
                 childList: true,
                 subtree: true,
                 attributes: true,
-                characterData: true
+                characterData: true,
+                attributeFilter: ['href']
             });
         } else if (config.log) {
             log(false, 'Browser does not support MutationObserver.');
@@ -179,5 +185,59 @@ out.revert = function () {
         }
     }
 };
+
+var generateConfig = function () {
+    var scriptNode = document.getElementById('aff-js');
+
+    var brkdwn = function (data, delimiter) {
+        if (typeof data === 'object') {
+            for (var i in data) {
+                data[i] = brkdwn(data[i], delimiter);
+            }
+        } else if (typeof data === 'string') {
+            data = data.split(delimiter);
+            for (var o in data) {
+                data[o] = data[o].trim();
+            }
+        }
+        return data;
+    };
+
+    if (typeof scriptNode === 'object') {
+        var nodeData = scriptNode.getAttribute('data-aff');
+
+        if (typeof nodeData === 'string') {
+            var parsedData = brkdwn(brkdwn(brkdwn(brkdwn(nodeData, '!'), ':'), ','), '=');
+            var tags = [];
+
+            for (var i in parsedData) {
+                var tag = {
+                    hosts: [],
+                    query: {}
+                };
+                for (var o in parsedData[i][0]) {
+                    tag.hosts.push(parsedData[i][0][o][0]);
+                }
+                for (var u in parsedData[i][1]) {
+                    tag.query[parsedData[i][1][u][0]] = parsedData[i][1][u][1];
+                }
+                tags.push(tag);
+            }
+
+            return {tags: tags};
+        }
+    }
+};
+
+try {
+    var config = generateConfig();
+    if (typeof config === 'object') {
+        var auto = out(config);
+        out.automatic = auto;
+        auto.attach();
+    }
+} catch (e) {
+    log(true, e);
+}
 
 module.exports = out;
