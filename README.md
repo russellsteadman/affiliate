@@ -1,7 +1,7 @@
 # Affiliate
 Affiliate is a platform agnostic link affiliator. Simplify affiliating links with automatic affiliation in the browser. Affiliate works with libraries that mutate the DOM after the page loads, including React.
 
-[![Star me on Github](https://img.shields.io/github/stars/teamtofu/affiliate.svg)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://img.shields.io/npm/dt/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified](https://img.shields.io/bundlephobia/min/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified and gunzipped](https://img.shields.io/bundlephobia/minzip/affiliate.svg)](https://www.npmjs.com/package/affiliate)
+[Star &#x1f31f; ![Star me on Github](https://img.shields.io/github/stars/teamtofu/affiliate.svg)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://img.shields.io/npm/dt/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified](https://img.shields.io/bundlephobia/min/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified and gunzipped](https://img.shields.io/bundlephobia/minzip/affiliate.svg)](https://www.npmjs.com/package/affiliate)
 
 ## Installation
 
@@ -92,7 +92,7 @@ Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https
 
 ## Star This Project
 
-'Cause if you liked it then you should have [put a star on it](https://github.com/teamtofu/affiliate). &#x1f609;&#xe51f;
+If you like it then you gotta [put a star on it](https://github.com/teamtofu/affiliate). &#x1f609;
 
 ## License
 
