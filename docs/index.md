@@ -3,6 +3,8 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 
 [![NPM](https://nodei.co/npm/affiliate.png)](https://www.npmjs.com/package/affiliate)
 
+[![&#x1f31f; Star me on Github](https://img.shields.io/github/stars/teamtofu/affiliate.svg)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://img.shields.io/npm/dt/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified](https://img.shields.io/bundlephobia/min/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified and gunzipped](https://img.shields.io/bundlephobia/minzip/affiliate.svg)](https://www.npmjs.com/package/affiliate)
+
 ## Installation
 
 ```bash
@@ -13,7 +15,7 @@ $ bower install -S affiliate
 
 Or Use A CDN
 ```html
-<script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate/dist/affiliate.js"></script>
 ```
 
 ## Configuration
@@ -95,6 +97,21 @@ Will become...
 You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-tag-20">Chocolate Passport</a>.
 ```
 
+### Blogs and Related Sites
+
+A simplified code-less solution might better suit some blogging-style sites.
+
+Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
+```html
+<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@1.2/dist/affiliate.js" async id="aff-js"></script>
+```
+
+#### data-aff Syntax
+The syntax for data-aff is a comma separated list of domains, colon, then comma separated list of tags in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
+```
+amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com : ref = MY-OTHER-TAG
+```
+
 ## Plugins
 
 Plugins make some more complex affiliation tasks super simple. Check out a list [here](https://affiliate.js.org/plugins), and [learn to make your own](https://affiliate.js.org/plugins).
@@ -108,6 +125,10 @@ Affiliate is tested using Jasmine. The test of the minified packages is availabl
 [![Sauce Labs](https://affiliate.js.org/test/sauce/saucelabs.png)](https://saucelabs.com/)
 
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com/)!
+
+## Star This Project
+
+If you like it then you gotta [put a star on it](https://github.com/teamtofu/affiliate). &#x1f609;&#x1f31f;
 
 ## License
 

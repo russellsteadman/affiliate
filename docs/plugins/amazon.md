@@ -15,7 +15,7 @@ $ bower install -S affiliate-plugin-amazon
 
 Or With A CDN
 ```html
-<script src="https://unpkg.com/affiliate-plugin-amazon@latest/dist/plugin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate-plugin-amazon/dist/plugin.js"></script>
 ```
 
 ## What It Can Do

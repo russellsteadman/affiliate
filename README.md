@@ -1,7 +1,7 @@
 # Affiliate
 Affiliate is a platform agnostic link affiliator. Simplify affiliating links with automatic affiliation in the browser. Affiliate works with libraries that mutate the DOM after the page loads, including React.
 
-[Star &#x1f31f; ![Star me on Github](https://img.shields.io/github/stars/teamtofu/affiliate.svg)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://img.shields.io/npm/dt/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified](https://img.shields.io/bundlephobia/min/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified and gunzipped](https://img.shields.io/bundlephobia/minzip/affiliate.svg)](https://www.npmjs.com/package/affiliate)
+[![&#x1f31f; Star me on Github](https://img.shields.io/github/stars/teamtofu/affiliate.svg)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://img.shields.io/npm/dt/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified](https://img.shields.io/bundlephobia/min/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified and gunzipped](https://img.shields.io/bundlephobia/minzip/affiliate.svg)](https://www.npmjs.com/package/affiliate)
 
 ## Installation
 
@@ -11,14 +11,14 @@ $ yarn add affiliate
 $ bower install -S affiliate
 ```
 
-Or use the Unpkg CDN
+Or use a CDN
 ```html
-<script src="https://unpkg.com/affiliate@latest/dist/affiliate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate/dist/affiliate.js"></script>
 ```
 
 For blogs who want Amazon affiliation
 ```html
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://unpkg.com/affiliate@1.2.x/dist/affiliate.js" async id="aff-js"></script>
+<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@1.2/dist/affiliate.js" async id="aff-js"></script>
 ```
 
 ## What It Can Do
@@ -71,7 +71,7 @@ A simplified code-less solution might better suit some blogging-style sites.
 
 Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
 ```html
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://unpkg.com/affiliate@1.2.x/dist/affiliate.js" async id="aff-js"></script>
+<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@1.2/dist/affiliate.js" async id="aff-js"></script>
 ```
 
 #### data-aff Syntax
@@ -92,7 +92,7 @@ Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https
 
 ## Star This Project
 
-If you like it then you gotta [put a star on it](https://github.com/teamtofu/affiliate). &#x1f609;
+If you like it then you gotta [put a star on it](https://github.com/teamtofu/affiliate). &#x1f609;&#x1f31f;
 
 ## License
 
