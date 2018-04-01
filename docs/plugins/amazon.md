@@ -8,13 +8,14 @@ Make sure [Affiliate](https://affiliate.js.org/) is already installed. Read the 
 ## Installation
 
 ```bash
-$ npm i -S affiliate-plugin-amazon
-$ yarn add affiliate-plugin-amazon
-$ bower install -S affiliate-plugin-amazon
+$ npm i -S affiliate affiliate-plugin-amazon
+$ yarn add affiliate affiliate-plugin-amazon
+$ bower install -S affiliate affiliate-plugin-amazon
 ```
 
-Or With A CDN
+Or use a CDN
 ```html
+<script src="https://cdn.jsdelivr.net/npm/affiliate/dist/affiliate.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/affiliate-plugin-amazon/dist/plugin.js"></script>
 ```
 

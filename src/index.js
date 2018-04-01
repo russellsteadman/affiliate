@@ -203,7 +203,7 @@ var generateConfig = function () {
         return data;
     };
 
-    if (typeof scriptNode === 'object') {
+    if (typeof scriptNode === 'object' && scriptNode !== null) {
         var nodeData = scriptNode.getAttribute('data-aff');
 
         if (typeof nodeData === 'string') {
