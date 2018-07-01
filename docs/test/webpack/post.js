@@ -7,7 +7,7 @@
 		var a = factory();
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(typeof self !== 'undefined' ? self : this, function() {
+})(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -46,12 +46,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -68,6 +88,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
+/******/
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 0);
@@ -91,259 +112,201 @@ module.exports = __webpack_require__(2);
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var parseURL = __webpack_require__(3);
-var Docile = __webpack_require__(7);
-
-var instanceList = [];
-
-var assign = function () {
-    var combo = {};
-
-    for (var i in arguments) {
-        for (var o in arguments[i]) {
-            combo[o] = arguments[i][o];
-        }
-    }
-
-    return combo;
-};
-
-var log = function (isError) {
-    if (typeof console === 'object') {
-        var args = Array.prototype.slice.call(arguments, 1);
-        var logFunc = isError ? console.error : console.log;
-        logFunc = Function.prototype.bind.call(logFunc, console);
-        logFunc.apply(console, ['[Affiliate] '].concat(args));
-    }
-};
-
-var Affiliate = function (config) {
-    config = assign({
-        log: false,
-        tags: []
-    }, config);
-
-    var noop = function (a) {return a;};
-
-    var hosts = [];
-    for (var i in config.tags) {
-        config.tags[i] = assign({
-            hosts: [],
-            query: {},
-            replace: [],
-            modifyHost: noop,
-            modifyPath: noop
-        }, config.tags[i]);
-        hosts = hosts.concat(config.tags[i].hosts);
-    }
-
-    if (config.log) log(false, 'New Instance', config);
-
-    var extendedMode = true;
-    var attached = false;
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    if (typeof MutationObserver === 'undefined') extendedMode = false;
-
-    var traverseNodes = function (nodeSet) {
-        if (config.log) log(false, 'Traversing DOM...');
-        var collection = nodeSet.getElementsByTagName('a');
-        var nodes = [];
-        for (var i in collection) {
-            if (collection.hasOwnProperty(i)) nodes[i] = collection[i];
-        }
-        if (nodeSet.nodeName.toLowerCase() === 'a') nodes = [nodeSet];
-        for (var o in nodes) checkURL(nodes[o]);
-    };
-
-    var checkURL = function (node) {
-        if (!node || !node.getAttribute('href')) return;
-        var url = parseURL(node.getAttribute('href') || '', true);
-        if (hosts.indexOf(url.host) === -1) return;
-        for (var i in config.tags) {
-            if (config.tags[i].hosts.indexOf(url.host) >= 0) {
-                modifyURL(url, node, config.tags[i]);
-            }
-        }
-    };
-
-    var modifyURL = function (url, node, tag) {
-        // Check if URL is already modified.
-        var linkData = Docile.get(node) || {};
-        if (linkData.to && linkData.to === url.href) return;
-
-        // Preserve the original URL.
-        var originalURL = url.href;
-
-        if (config.log) log(false, 'Discovered URL: ' + url.href);
-
-        // Change query variables.
-        url.set('query', assign(url.query, tag.query));
-
-        // Run the modification functions.
-        if (typeof tag.modifyPath === 'function') {
-            try {
-                url.set('pathname', tag.modifyPath(url.pathname));
-            } catch (e) {log(true, e);}
-        }
-        if (typeof tag.modifyHost === 'function') {
-            try {
-                url.set('host', tag.modifyHost(url.host));
-            } catch (e) {log(true, e);}
-        }
-
-        // Replace certain parts of the url
-        var urlRaw = url.href;
-        for (var i in tag.replace) {
-            urlRaw = urlRaw.replace(tag.replace[i].from, tag.replace[i].to);
-        }
-
-        // Update the href tag
-        node.setAttribute('href', urlRaw);
-        Docile.set(node, {
-            href: originalURL,
-            to: urlRaw
-        });
-    };
-
-    if (extendedMode) {
-        this.observer = new MutationObserver(function(mutations) {
-            if (config.log) log(false, 'DOM Mutation');
-            for (var i in mutations) {
-                if (mutations[i].type === 'attributes') {
-                    if (mutations[i].attributeName !== 'href') continue;
-                    var href = mutations[i].target.getAttribute('href');
-                    var linkData = Docile.get(mutations[i].target) || {};
-                    if (linkData.to && linkData.to === href) continue;
-                }
-                traverseNodes(mutations[i].target);
-            }
-        });
-    }
-
-    var self = this;
-
-    this.attach = function () {
-        if (attached) return;
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            attached = true;
-            traverseNodes(document.body);
-        } else {
-            return window.addEventListener('DOMContentLoaded', this.attach);
-        }
-        if (extendedMode) {
-            self.observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                characterData: true,
-                attributeFilter: ['href']
-            });
-        } else if (config.log) {
-            log(false, 'Browser does not support MutationObserver.');
-        }
-    };
-
-    this.detach = function () {
-        if (!extendedMode) return;
-        attached = false;
-        self.observer.disconnect();
-        if (config.log) log(false, 'Observer disconnected.');
-    };
-};
-
-var out = function (config) {
-    var Instance = new Affiliate(config);
-    instanceList.push(Instance);
-    return Instance;
-};
-
-out.instances = function () {
-    return [].concat(instanceList);
-};
-
-out.detachAll = function () {
-    for (var i in instanceList) {
-        instanceList[i].detach();
-    }
-};
-
-out.revert = function () {
-    out.detachAll();
-    var nodes = [].slice.call(document.body.getElementsByTagName('a'));
-    for (var i in nodes) {
-        var linkData = Docile.get(nodes[i]);
-        if (linkData && linkData.href) {
-            nodes[i].setAttribute('href', linkData.href);
-            Docile.set(nodes[i], {});
-        }
-    }
-};
-
-var generateConfig = function () {
-    var scriptNode = document.getElementById('aff-js');
-
-    var brkdwn = function (data, delimiter) {
-        if (typeof data === 'object') {
-            for (var i in data) {
-                data[i] = brkdwn(data[i], delimiter);
-            }
-        } else if (typeof data === 'string') {
-            data = data.split(delimiter);
-            for (var o in data) {
-                data[o] = data[o].trim();
-            }
-        }
-        return data;
-    };
-
-    if (typeof scriptNode === 'object' && scriptNode !== null) {
-        var nodeData = scriptNode.getAttribute('data-aff');
-
-        if (typeof nodeData === 'string') {
-            var parsedData = brkdwn(brkdwn(brkdwn(brkdwn(nodeData, '!'), ':'), ','), '=');
-            var tags = [];
-
-            for (var i in parsedData) {
-                var tag = {
-                    hosts: [],
-                    query: {}
-                };
-                for (var o in parsedData[i][0]) {
-                    tag.hosts.push(parsedData[i][0][o][0]);
-                }
-                for (var u in parsedData[i][1]) {
-                    tag.query[parsedData[i][1][u][0]] = parsedData[i][1][u][1];
-                }
-                tags.push(tag);
-            }
-
-            return {tags: tags};
-        }
-    }
-};
-
-try {
-    var config = generateConfig();
-    if (typeof config === 'object') {
-        var auto = out(config);
-        out.automatic = auto;
-        auto.attach();
-    }
-} catch (e) {
-    log(true, e);
-}
-
-module.exports = out;
+module.exports=function(t){var e={};function o(r){if(e[r])return e[r].exports;var n=e[r]={i:r,l:!1,exports:{}};return t[r].call(n.exports,n,n.exports,o),n.l=!0,n.exports}return o.m=t,o.c=e,o.d=function(t,e,r){o.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},o.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},o.t=function(t,e){if(1&e&&(t=o(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(o.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)o.d(r,n,function(e){return t[e]}.bind(null,n));return r},o.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return o.d(e,"a",e),e},o.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},o.p="",o(o.s=6)}([function(t,e,o){"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};t.exports=function(t){if("object"===("undefined"==typeof console?"undefined":r(console))){var e=Array.prototype.slice.call(arguments,1),o=t?console.error:console.info;(o=Function.prototype.bind.call(o,console)).apply(console,["[Affiliate] "].concat(e))}}},function(t,e){t.exports=__webpack_require__(3)},function(t,e){t.exports=__webpack_require__(5)},function(t,e,o){"use strict";var r=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var o=arguments[e];for(var r in o)Object.prototype.hasOwnProperty.call(o,r)&&(t[r]=o[r])}return t},n=function(){function t(t,e){for(var o=0;o<e.length;o++){var r=e[o];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(t,r.key,r)}}return function(e,o,r){return o&&t(e.prototype,o),r&&t(e,r),e}}();var i=o(2),a=o(1),s=o(0),c=window.MutationObserver||window.WebKitMutationObserver||window.MozMutationObserver,f=!(void 0===c),u=function(){function t(e){var o=this;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e=r({log:!1,tags:[]},e);var n=[];for(var i in e.tags)e.tags[i]=r({hosts:[],query:{},replace:[]},e.tags[i]),n=n.concat(e.tags[i].hosts);e.log&&s(!1,"New Instance",e),f&&(this.observer=new c(function(t){for(var r in e.log&&s(!1,"DOM Mutation"),t){if("attributes"===t[r].type){if("href"!==t[r].attributeName)continue;var n=t[r].target.getAttribute("href"),i=a.get(t[r].target)||{};if(i.to&&i.to===n)continue}o.traverseNodes(t[r].target)}})),this.state={attached:!1,config:e,hosts:n}}return n(t,[{key:"traverseNodes",value:function(t){t||(t=document.body),this.state.config.log&&s(!1,"Traversing DOM...");var e=t.getElementsByTagName("a"),o=[];for(var r in e)e.hasOwnProperty(r)&&(o[r]=e[r]);for(var n in"a"===t.nodeName.toLowerCase()&&(o=[t]),o){if(!o[n]||!o[n].getAttribute("href"))return;var a=i(o[n].getAttribute("href")||"",!0);if(-1!==this.state.hosts.indexOf(a.host))for(var c in this.state.config.tags)this.state.config.tags[c].hosts.indexOf(a.host)>=0&&this.modifyURL(a,o[n],this.state.config.tags[c])}}},{key:"modifyURL",value:function(t,e,o){var n=a.get(e)||{};if(!n.to||n.to!==t.href){var i=t.href;if(this.state.config.log&&s(!1,"Discovered URL: "+t.href),t.set("query",r({},t.query,o.query)),"function"==typeof o.modifyPath)try{t.set("pathname",o.modifyPath(t.pathname))}catch(t){s(!0,t)}if("function"==typeof o.modifyHost)try{t.set("host",o.modifyHost(t.host))}catch(t){s(!0,t)}var c=t.href;for(var f in o.replace)c=c.replace(o.replace[f].from,o.replace[f].to);e.setAttribute("href",c),a.set(e,{href:i,to:c})}}},{key:"attach",value:function(){if(!this.state.attached){if("complete"!==document.readyState&&"interactive"!==document.readyState)return window.addEventListener("DOMContentLoaded",this.attach.bind(this));this.state.attached=!0,this.traverseNodes(document.body),f?this.observer.observe(document.body,{childList:!0,subtree:!0,attributes:!0,characterData:!0,attributeFilter:["href"]}):this.state.config.log&&s(!1,"Browser does not support MutationObserver.")}}},{key:"detach",value:function(){f&&(this.state.attached=!1,this.observer.disconnect(),this.state.config.log&&s(!1,"Observer disconnected."))}}]),t}();t.exports=u},function(t,e,o){"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},n=function t(e,o){if("object"===(void 0===e?"undefined":r(e)))for(var n in e)e[n]=t(e[n],o);else if("string"==typeof e)for(var i in e=e.split(o))e[i]=e[i].trim();return e};t.exports=function(){var t=document.getElementById("aff-js");if("object"===(void 0===t?"undefined":r(t))&&null!==t){var e=t.getAttribute("data-aff");if("string"==typeof e){var o=n(n(n(n(e,"!"),":"),","),"="),i=[];for(var a in o){var s={hosts:[],query:{}};for(var c in o[a][0])s.hosts.push(o[a][0][c][0]);for(var f in o[a][1])s.query[o[a][1][f][0]]=o[a][1][f][1];i.push(s)}return{tags:i}}}}},function(t,e){var o;o=function(){return this}();try{o=o||Function("return this")()||(0,eval)("this")}catch(t){"object"==typeof window&&(o=window)}t.exports=o},function(t,e,o){"use strict";(function(e){var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},n=o(1),i=o(4),a=o(3),s=o(0);e.instanceList=e.instanceList||[];var c=function(t){var o=new a(t);return e.instanceList.push(o),o};c.instances=function(){return[].concat(e.instanceList)},c.detachAll=function(){for(var t in e.instanceList)e.instanceList[t].detach()},c.revert=function(){c.detachAll();var t=[].slice.call(document.body.getElementsByTagName("a"));for(var e in t){var o=n.get(t[e]);o&&o.href&&(t[e].setAttribute("href",o.href),n.set(t[e],{}))}};try{var f=i();if("object"===(void 0===f?"undefined":r(f))){var u=c(f);s(!1,u),c.automatic=u,u.attach()}}catch(t){s(!0,t)}t.exports=c}).call(this,o(5))}]);
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
+/** @module docile */
+module.exports = __webpack_require__(4);
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+var domReady = ['loaded', 'interactive', 'complete'].indexOf(document.readyState) >= 0;
+
+var attrId = 'data-docile-id';
+var attrStore = 'data-docile-store';
+
+var nativeBind = Function.prototype.bind;
+var slice = Array.prototype.slice;
+
+var bindTo = function (func, context) {
+    if (nativeBind && func.bind === nativeBind) {
+        return nativeBind.apply(func, slice.call(arguments, 1));
+    }
+    var args = slice.call(arguments, 2);
+    return function () {
+        return func.apply(context, args.concat(slice.call(arguments)));
+    };
+};
+
+var error = function () {
+    if (typeof console === 'object') {
+        var args = Array.prototype.slice.call(arguments);
+        var logFunc = Function.prototype.bind.call(console.error, console);
+        logFunc.apply(console, ['[Docile] '].concat(args));
+    }
+};
+
+var createId = function (node) {
+    var id = node.getAttribute(attrId);
+    if (!id) {
+        id = Math.random().toString(36).substr(2);
+        node.setAttribute(attrId, id);
+        return id;
+    }
+    return id;
+};
+
+var findNode = function (node) {
+    if (!domReady) {
+        error('DOM not loaded. Learn more: https://goo.gl/EsYspK');
+        return null;
+    }
+    if (typeof node === 'object') {
+        return node;
+    } else if (typeof node === 'string') {
+        node = document.getElementById(node);
+        if (node) return node;
+    }
+    error('Unable to resolve node.');
+};
+
+var findById = function (id) {
+    return document.querySelector('[' + attrId + '="' + id + '"]');
+};
+
+var revive = function () {
+    var data = {store:{},linkStore:{}};
+    if (!document.head.getAttribute(attrStore)) document.head.setAttribute(attrStore, '{"store":{},"linkStore":{}}');
+    try {
+        data = JSON.parse(document.head.getAttribute(attrStore));
+    } catch (e) {
+        error('Data could not be resumed.');
+    }
+    return data;
+};
+
+var persist = function (storeData, linkStoreData) {
+    try {
+        document.head.setAttribute(attrStore, JSON.stringify({store: storeData, linkStore: linkStoreData}));
+    } catch (e) {
+        error('Data could not be saved.');
+    }
+};
+
+var set = function (node, data) {
+    node = findNode(node);
+    if (!node) return;
+    var id = createId(node);
+    this.store[id] = data;
+    persist(this.store, this.linkStore);
+    return this;
+};
+
+var get = function (node) {
+    node = findNode(node);
+    if (!node) return;
+    var id = createId(node);
+    return this.store[id];
+};
+
+var setLink = function (main, alias, node) {
+    main.linkStore[this.id] = main.linkStore[this.id] || {};
+    if (typeof alias === 'string') {
+        node = findNode(node);
+        if (!node) return;
+        main.linkStore[this.id][alias] = createId(node);
+    } else if (typeof alias === 'object') {
+        for (var i in alias) {
+            this.set(i, alias[i]);
+        }
+    }
+    persist(main.store, main.linkStore);
+    return this;
+};
+
+var getLink = function (main, alias) {
+    main.linkStore[this.id] = main.linkStore[this.id] || {};
+    if (alias) {
+        if (typeof alias !== 'string') return error('Link name must be a string.');
+        return findById(main.linkStore[this.id][alias]);
+    } else {
+        var links = {};
+        for (var i in main.linkStore[this.id]) {
+            links[i] = findById(main.linkStore[this.id][i]);
+        }
+        return links;
+    }
+};
+
+var getLinkData = function (main, alias) {
+    if (alias) {
+        return main.get(this.get(alias));
+    } else {
+        var listLinks = this.get();
+        for (var i in listLinks) {
+            listLinks[i] = main.get(listLinks[i]);
+        }
+        return listLinks;
+    }
+};
+
+var link = function (node) {
+    node = findNode(node);
+    if (!node) return;
+    var id = createId(node);
+    var DocileLink = new Object();
+    DocileLink.id = id;
+    DocileLink.set = bindTo(setLink, DocileLink, this);
+    DocileLink.get = bindTo(getLink, DocileLink, this);
+    DocileLink.getData = bindTo(getLinkData, DocileLink, this);
+    return DocileLink;
+};
+
+/**
+ * Stores data about DOM nodes.
+ * @property {function} set - Set data
+ * @property {function} get - Get data
+ * @property {function} link - Links nodes
+ */
+var Docile = new Object();
+/**
+ * @param {(string|Object)} node - The DOM node or node id
+ */
+Docile.get = bindTo(get, Docile);
+/**
+ * @param {(string|Object)} node - The DOM node or node id
+ * @param {*} data - The data to be stored
+ */
+Docile.set = bindTo(set, Docile);
+/**
+ * @param {(string|Object)} node - The DOM node for accessing a link
+ */
+Docile.link = bindTo(link, Docile);
+
+var initialData = revive();
+Docile.store = initialData.store || {};
+Docile.linkStore = initialData.linkStore || {};
+
+window.addEventListener('DOMContentLoaded', function () {
+    domReady = true;
+});
+
+module.exports = Docile;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global) {
 
-var required = __webpack_require__(5)
-  , qs = __webpack_require__(6)
+var required = __webpack_require__(7)
+  , qs = __webpack_require__(8)
   , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
   , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
 
@@ -392,7 +355,8 @@ var ignore = { hash: 1, query: 1 };
  * @api public
  */
 function lolcation(loc) {
-  loc = loc || global.location || {};
+  var location = global && global.location || {};
+  loc = loc || location;
 
   var finaldestination = {}
     , type = typeof loc
@@ -753,10 +717,10 @@ URL.qs = qs;
 
 module.exports = URL;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6)))
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports) {
 
 var g;
@@ -768,11 +732,10 @@ g = (function() {
 
 try {
 	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
 	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
+	if (typeof window === "object") g = window;
 }
 
 // g can still be undefined, but nothing to do about it...
@@ -783,7 +746,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -828,7 +791,7 @@ module.exports = function required(port, protocol) {
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -859,15 +822,18 @@ function querystring(query) {
     , result = {}
     , part;
 
-  //
-  // Little nifty parsing hack, leverage the fact that RegExp.exec increments
-  // the lastIndex property so we can continue executing this loop until we've
-  // parsed all results.
-  //
-  for (;
-    part = parser.exec(query);
-    result[decode(part[1])] = decode(part[2])
-  );
+  while (part = parser.exec(query)) {
+    var key = decode(part[1])
+      , value = decode(part[2]);
+
+    //
+    // Prevent overriding of existing properties. This ensures that build-in
+    // methods like `toString` or __proto__ are not overriden by malicious
+    // querystrings.
+    //
+    if (key in result) continue;
+    result[key] = value;
+  }
 
   return result;
 }
@@ -905,190 +871,6 @@ function querystringify(obj, prefix) {
 exports.stringify = querystringify;
 exports.parse = querystring;
 
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/** @module docile */
-module.exports = __webpack_require__(8);
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-var domReady = ['loaded', 'interactive', 'complete'].indexOf(document.readyState) >= 0;
-
-var attrId = 'data-docile-id';
-var attrStore = 'data-docile-store';
-
-var nativeBind = Function.prototype.bind;
-var slice = Array.prototype.slice;
-
-var bindTo = function (func, context) {
-    if (nativeBind && func.bind === nativeBind) {
-        return nativeBind.apply(func, slice.call(arguments, 1));
-    }
-    var args = slice.call(arguments, 2);
-    return function () {
-        return func.apply(context, args.concat(slice.call(arguments)));
-    };
-};
-
-var error = function () {
-    if (typeof console === 'object') {
-        var args = Array.prototype.slice.call(arguments);
-        var logFunc = Function.prototype.bind.call(console.error, console);
-        logFunc.apply(console, ['[Docile] '].concat(args));
-    }
-};
-
-var createId = function (node) {
-    var id = node.getAttribute(attrId);
-    if (!id) {
-        id = Math.random().toString(36).substr(2);
-        node.setAttribute(attrId, id);
-        return id;
-    }
-    return id;
-};
-
-var findNode = function (node) {
-    if (!domReady) {
-        error('DOM not loaded. Learn more: https://goo.gl/EsYspK');
-        return null;
-    }
-    if (typeof node === 'object') {
-        return node;
-    } else if (typeof node === 'string') {
-        node = document.getElementById(node);
-        if (node) return node;
-    }
-    error('Unable to resolve node.');
-};
-
-var findById = function (id) {
-    return document.querySelector('[' + attrId + '="' + id + '"]');
-};
-
-var revive = function () {
-    var data = {store:{},linkStore:{}};
-    if (!document.head.getAttribute(attrStore)) document.head.setAttribute(attrStore, '{"store":{},"linkStore":{}}');
-    try {
-        data = JSON.parse(document.head.getAttribute(attrStore));
-    } catch (e) {
-        error('Data could not be resumed.');
-    }
-    return data;
-};
-
-var persist = function (storeData, linkStoreData) {
-    try {
-        document.head.setAttribute(attrStore, JSON.stringify({store: storeData, linkStore: linkStoreData}));
-    } catch (e) {
-        error('Data could not be saved.');
-    }
-};
-
-var set = function (node, data) {
-    node = findNode(node);
-    if (!node) return;
-    var id = createId(node);
-    this.store[id] = data;
-    persist(this.store, this.linkStore);
-    return this;
-};
-
-var get = function (node) {
-    node = findNode(node);
-    if (!node) return;
-    var id = createId(node);
-    return this.store[id];
-};
-
-var setLink = function (main, alias, node) {
-    main.linkStore[this.id] = main.linkStore[this.id] || {};
-    if (typeof alias === 'string') {
-        node = findNode(node);
-        if (!node) return;
-        main.linkStore[this.id][alias] = createId(node);
-    } else if (typeof alias === 'object') {
-        for (var i in alias) {
-            this.set(i, alias[i]);
-        }
-    }
-    persist(main.store, main.linkStore);
-    return this;
-};
-
-var getLink = function (main, alias) {
-    main.linkStore[this.id] = main.linkStore[this.id] || {};
-    if (alias) {
-        if (typeof alias !== 'string') return error('Link name must be a string.');
-        return findById(main.linkStore[this.id][alias]);
-    } else {
-        var links = {};
-        for (var i in main.linkStore[this.id]) {
-            links[i] = findById(main.linkStore[this.id][i]);
-        }
-        return links;
-    }
-};
-
-var getLinkData = function (main, alias) {
-    if (alias) {
-        return main.get(this.get(alias));
-    } else {
-        var listLinks = this.get();
-        for (var i in listLinks) {
-            listLinks[i] = main.get(listLinks[i]);
-        }
-        return listLinks;
-    }
-};
-
-var link = function (node) {
-    node = findNode(node);
-    if (!node) return;
-    var id = createId(node);
-    var DocileLink = new Object();
-    DocileLink.id = id;
-    DocileLink.set = bindTo(setLink, DocileLink, this);
-    DocileLink.get = bindTo(getLink, DocileLink, this);
-    DocileLink.getData = bindTo(getLinkData, DocileLink, this);
-    return DocileLink;
-};
-
-/**
- * Stores data about DOM nodes.
- * @property {function} set - Set data
- * @property {function} get - Get data
- * @property {function} link - Links nodes
- */
-var Docile = new Object();
-/**
- * @param {(string|Object)} node - The DOM node or node id
- */
-Docile.get = bindTo(get, Docile);
-/**
- * @param {(string|Object)} node - The DOM node or node id
- * @param {*} data - The data to be stored
- */
-Docile.set = bindTo(set, Docile);
-/**
- * @param {(string|Object)} node - The DOM node for accessing a link
- */
-Docile.link = bindTo(link, Docile);
-
-var initialData = revive();
-Docile.store = initialData.store || {};
-Docile.linkStore = initialData.linkStore || {};
-
-window.addEventListener('DOMContentLoaded', function () {
-    domReady = true;
-});
-
-module.exports = Docile;
 
 /***/ })
 /******/ ]);

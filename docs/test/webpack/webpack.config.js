@@ -1,7 +1,7 @@
 /* global __dirname */
-var path = require('path');
-var fs = require('fs');
-fs.copyFile(path.join(__dirname, './../../../dist/affiliate.js'), path.join(__dirname, './../dist.js'), function () {});
+const path = require('path');
+const fs = require('fs');
+fs.copyFile(path.join(__dirname, './../../../dist/affiliate.js'), path.join(__dirname, './../dist.js'), () => {});
 
 module.exports = {
   entry: './pre.js',
@@ -11,5 +11,5 @@ module.exports = {
     libraryTarget: 'umd'
   },
   context: __dirname,
-  target: 'web'
+  mode: 'none'
 };

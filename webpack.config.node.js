@@ -5,9 +5,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'), 
-    filename: 'affiliate.js',
-    library: 'Affiliate',
-    libraryTarget: 'window'
+    filename: 'affiliate.node.js',
+    libraryTarget: 'commonjs2'
   },
 
   module: {
@@ -20,8 +19,8 @@ module.exports = {
                 options: {
                     presets: [
                       ['env', {
-                        'targets': {
-                          'browsers': ['last 4 versions', 'safari >= 7', 'ie >= 9']
+                        targets: {
+                          browsers: ['last 4 versions', 'safari >= 7', 'ie >= 9']
                         }
                       }]
                     ],
@@ -42,8 +41,15 @@ module.exports = {
     extensions: ['.js', '.json']
   },
 
+  externals: function(context, request, callback) {
+    if (/^(docile|url-parse)/.test(request)){
+      return callback(null, 'commonjs ' + request);
+    }
+    callback();
+  },
+
   context: __dirname,
-  target: 'web',
+  //target: 'node',
   mode: 'production',
 
   plugins: []
