@@ -4,6 +4,7 @@ node_modules/
 .gitignore
 yarn.lock
 webpack.config.js
+webpack.config.node.js
 .babelrc
 docs/
 PULL_REQUEST_TEMPLATE

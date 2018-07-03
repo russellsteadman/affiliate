@@ -8,17 +8,12 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 ```bash
 $ npm i -S affiliate
 $ yarn add affiliate
-$ bower install -S affiliate
 ```
 
 Or use a CDN
 ```html
-<script src="https://cdn.jsdelivr.net/npm/affiliate/dist/affiliate.js"></script>
-```
-
-For blogs who want Amazon affiliation
-```html
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@1.2/dist/affiliate.js" async id="aff-js"></script>
+<!-- Replace <VERSION> with your intended version, e.g. 1.2.1 -->
+<script src="https://cdn.jsdelivr.net/npm/affiliate@<VERSION>/dist/affiliate.js"></script>
 ```
 
 ## What It Can Do
@@ -34,26 +29,26 @@ Affiliate can modify the following link into any of the others.
 <a href="https://my-tag.example.com/shop/product/item-id">Modified Host Name</a>
 ```
 
-Affiliate has easy [plugins](https://affiliate.js.org/plugins), such as one for [Amazon](https://affiliate.js.org/plugins/amazon), which simplify adding affiliate links even more.
+Affiliate has easy [plugins](https://affiliate.js.org/plugins), including one for [Amazon](https://affiliate.js.org/plugins/amazon), which simplify adding affiliate links even more.
 
 ## Basic Setup
 
 Read [the documentation](https://affiliate.js.org/) for more advanced usage.
 
 ```js
-// var Affiliate = require('affiliate');
-var aff = Affiliate({
+const Affiliate = require('affiliate');
+const aff = Affiliate({
     tags: [
         {
             hosts: ['example.com', 'www.example.com'],
             query: {
-                ref: 'my-tag' // ?ref=my-tag
+                ref: 'my-tag' // This means ?ref=my-tag
             }
         },
         {
             hosts: ['example.org', 'shop.example.org'],
             query: {
-                tag: 'my-tag2' // ?tag=my-tag2
+                tag: 'my-tag2' // This means ?tag=my-tag2
             }
         }
     ]
@@ -67,15 +62,16 @@ Affiliate is simple and quick to set up, even for more complex usage. Read the d
 
 ### Blogs and Related Sites
 
-A simplified code-less solution might better suit some blogging-style sites.
+A simplified codeless solution might better suit some blogging-style sites.
 
 Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
 ```html
+<!-- Replace 1.2 with your intended version -->
 <script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@1.2/dist/affiliate.js" async id="aff-js"></script>
 ```
 
 #### data-aff Syntax
-The syntax for data-aff is a comma separated list of domains, colon, then comma separated list of tags in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
+The syntax for data-aff is a comma separated list of domains, a colon, and then comma separated list of url queries in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
 ```
 amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com : ref = MY-OTHER-TAG
 ```
@@ -96,7 +92,7 @@ If you like it then you gotta [put a star on it](https://github.com/teamtofu/aff
 
 ## License
 
-MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://teamtofu.github.io/contact/). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
 
 ## Support Me
 

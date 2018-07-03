@@ -2,13 +2,12 @@ const parseURL = require('url-parse');
 const Docile = require('docile');
 const log = require('./log');
 
-const MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-const extendedMode = !(typeof MutationObserver === 'undefined');
+// Check for MutationObserver
+const canObserve = !(typeof window.MutationObserver === 'undefined');
 
 class Affiliate {
     constructor(config) {
         config = {...{
-            log: false,
             tags: []
         }, ...config};
     
@@ -22,11 +21,13 @@ class Affiliate {
             hosts = hosts.concat(config.tags[i].hosts);
         }
     
-        if (config.log) log(false, 'New Instance', config);
+        this.log = config.log ? log : () => {};
 
-        if (extendedMode) {
-            this.observer = new MutationObserver((mutations) => {
-                if (config.log) log(false, 'DOM Mutation');
+        this.log(false, 'New Instance', config);
+
+        if (canObserve) {
+            this.observer = new window.MutationObserver((mutations) => {
+                this.log(false, 'DOM Mutation');
                 for (let i in mutations) {
                     if (mutations[i].type === 'attributes') {
                         if (mutations[i].attributeName !== 'href') continue;
@@ -50,7 +51,7 @@ class Affiliate {
         // Default to searching everything
         if (!nodeSet) nodeSet = document.body;
 
-        if (this.state.config.log) log(false, 'Traversing DOM...');
+        this.log(false, 'Traversing DOM...');
 
         // Reduce link collection to array
         let collection = nodeSet.getElementsByTagName('a');
@@ -84,7 +85,7 @@ class Affiliate {
         // Preserve the original URL.
         let originalURL = url.href;
 
-        if (this.state.config.log) log(false, 'Discovered URL: ' + url.href);
+        this.log(false, 'Discovered URL: ' + url.href);
 
         // Change query variables.
         url.set('query', {...url.query, ...tag.query});
@@ -129,7 +130,7 @@ class Affiliate {
             return window.addEventListener('DOMContentLoaded', this.attach.bind(this));
         }
 
-        if (extendedMode) {
+        if (canObserve) {
             this.observer.observe(document.body, {
                 childList: true,
                 subtree: true,
@@ -137,16 +138,16 @@ class Affiliate {
                 characterData: true,
                 attributeFilter: ['href']
             });
-        } else if (this.state.config.log) {
-            log(false, 'Browser does not support MutationObserver.');
+        } else {
+            this.log(false, 'Browser does not support MutationObserver.');
         }
     }
 
     detach() {
-        if (!extendedMode) return;
+        if (!canObserve) return;
         this.state.attached = false;
         this.observer.disconnect();
-        if (this.state.config.log) log(false, 'Observer disconnected.');
+        this.log(false, 'Observer disconnected.');
     }
 }
 
