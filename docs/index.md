@@ -40,11 +40,10 @@ const aff = Affiliate({
                     to: 'my-tag'
                 }
             ],
-            modifyPath: function (path) { // a function that returns a new path
-                return path + '-tag';
-            },
-            modifyHost: function (host) { // a function that returns a new host
-                return host.split(':')[0] + '.rdr.example.com';
+            modify: function (url) { // a function that directly modifies the URL
+                url.set('pathname', url.pathname + '-tag');
+                url.set('hostname', url.hostname + '.rdr.example.com');
+                return url;
             }
         }
     ]
@@ -53,6 +52,26 @@ aff.attach();
 ```
 
 After passing the configuration to Affiliate, it will search the DOM and automatically and change links. Then whenever the DOM is modified, it will search through the modifications and change those links for no-hassle affiliation.
+
+#### config.log
+
+A boolean of whether or not to enable verbose logging.
+
+#### config.tags[].hosts
+
+An array of the hosts to match.
+
+#### config.tags[].query
+
+An object to update the query of the url.
+
+#### config.tags[].replace
+
+An array of objects with a `from` key that is a regex or string and a `to` key that is the value that will replace the `from` key.
+
+#### config.tags[].modify
+
+This exposes an instance of the [`url-parse`](https://www.npmjs.com/package/url-parse#usage) library. This can be used to update individual parts of the URL, such as the hostname or hash. It expects the instance or a URL string to be returned.
 
 ## Affiliate API
 

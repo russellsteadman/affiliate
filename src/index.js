@@ -26,8 +26,8 @@ Initialize.revert = () => {
     let nodes = [].slice.call(document.body.getElementsByTagName('a'));
     for (let i in nodes) {
         let linkData = Docile.get(nodes[i]);
-        if (linkData && linkData.href) {
-            nodes[i].setAttribute('href', linkData.href);
+        if (linkData && linkData.was) {
+            nodes[i].setAttribute('href', linkData.was);
             Docile.set(nodes[i], {});
         }
     }

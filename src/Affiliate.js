@@ -33,7 +33,7 @@ class Affiliate {
                         if (mutations[i].attributeName !== 'href') continue;
                         let href = mutations[i].target.getAttribute('href');
                         let linkData = Docile.get(mutations[i].target) || {};
-                        if (linkData.to && linkData.to === href) continue;
+                        if (linkData.is && linkData.is === href) continue;
                     }
                     this.traverseNodes(mutations[i].target);
                 }
@@ -78,54 +78,50 @@ class Affiliate {
     }
 
     modifyURL(url, node, tag) {
-        // Check if URL is already modified.
+        // Check if URL is already modified
         let linkData = Docile.get(node) || {};
-        if (linkData.to && linkData.to === url.href) return;
+        if (linkData.is && linkData.is === url.href) return;
 
-        // Preserve the original URL.
+        // Preserve the original URL
         let originalURL = url.href;
 
         this.log(false, 'Discovered URL: ' + url.href);
 
-        // Change query variables.
+        // Change query variables
         url.set('query', {...url.query, ...tag.query});
 
-        // Run the modification functions.
-        if (typeof tag.modifyPath === 'function') {
+        // Run the modification function
+        if (typeof tag.modify === 'function') {
             try {
-                url.set('pathname', tag.modifyPath(url.pathname));
-            } catch (e) {
-                log(true, e);
-            }
-        }
-        if (typeof tag.modifyHost === 'function') {
-            try {
-                url.set('host', tag.modifyHost(url.host));
+                let returnedURL = tag.modify(url);
+                url = parseURL(returnedURL.href || returnedURL, true);
             } catch (e) {
                 log(true, e);
             }
         }
 
         // Replace certain parts of the url
-        let urlRaw = url.href;
+        url = url.href;
         for (let i in tag.replace) {
-            urlRaw = urlRaw.replace(tag.replace[i].from, tag.replace[i].to);
+            url = url.replace(tag.replace[i].from, tag.replace[i].to);
         }
 
         // Update the href tag
-        node.setAttribute('href', urlRaw);
+        node.setAttribute('href', url);
         Docile.set(node, {
-            href: originalURL,
-            to: urlRaw
+            was: originalURL,
+            is: url
         });
     }
 
     attach() {
         if (this.state.attached) return;
 
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        let { readyState } = document;
+
+        if (readyState === 'complete' || readyState === 'interactive') {
             this.state.attached = true;
-            this.traverseNodes(document.body);
+            this.traverseNodes();
         } else {
             return window.addEventListener('DOMContentLoaded', this.attach.bind(this));
         }

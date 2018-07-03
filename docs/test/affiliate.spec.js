@@ -18,11 +18,10 @@ var optionOne = {
                     to: 'my-tag'
                 }
             ],
-            modifyPath: function (path) {
-                return path + '-tag';
-            },
-            modifyHost: function (host) {
-                return 'tst.' + host;
+            modify: function (url) {
+                url.set('pathname', url.pathname + '-tag');
+                url.set('hostname', 'tst.' + url.hostname);
+                return url;
             }
         }
     ]
@@ -46,11 +45,10 @@ var optionTwo = {
                     to: 'my-tag2'
                 }
             ],
-            modifyPath: function (path) {
-                return path + '-tag2';
-            },
-            modifyHost: function (host) {
-                return 'tst2.' + host;
+            modify: function (url) {
+                url.set('pathname', url.pathname + '-tag2');
+                url.set('hostname', 'tst2.' + url.hostname);
+                return url;
             }
         }
     ]
