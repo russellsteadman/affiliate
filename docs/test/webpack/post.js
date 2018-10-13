@@ -112,7 +112,7 @@ module.exports = __webpack_require__(2);
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports=function(t){var e={};function r(o){if(e[o])return e[o].exports;var n=e[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,r),n.l=!0,n.exports}return r.m=t,r.c=e,r.d=function(t,e,o){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(r.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)r.d(o,n,function(e){return t[e]}.bind(null,n));return o},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=6)}([function(t,e,r){"use strict";var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};t.exports=function(t){if("object"===("undefined"==typeof console?"undefined":o(console))){var e=Array.prototype.slice.call(arguments,1),r=t?console.error:console.info;(r=Function.prototype.bind.call(r,console)).apply(console,["[Affiliate] "].concat(e))}}},function(t,e){t.exports=__webpack_require__(3)},function(t,e){t.exports=__webpack_require__(5)},function(t,e,r){"use strict";var o=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(t[o]=r[o])}return t},n=function(){function t(t,e){for(var r=0;r<e.length;r++){var o=e[r];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(e,r,o){return r&&t(e.prototype,r),o&&t(e,o),e}}();var i=r(2),a=r(1),s=r(0),c=!(void 0===window.MutationObserver),f=function(){function t(e){var r=this;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e=o({tags:[]},e);var n=[];for(var i in e.tags)e.tags[i]=o({hosts:[],query:{},replace:[]},e.tags[i]),n=n.concat(e.tags[i].hosts);this.log=e.log?s:function(){},this.log(!1,"New Instance",e),c&&(this.observer=new window.MutationObserver(function(t){for(var e in r.log(!1,"DOM Mutation"),t){if("attributes"===t[e].type){if("href"!==t[e].attributeName)continue;var o=t[e].target.getAttribute("href"),n=a.get(t[e].target)||{};if(n.is&&n.is===o)continue}r.traverseNodes(t[e].target)}})),this.state={attached:!1,config:e,hosts:n}}return n(t,[{key:"traverseNodes",value:function(t){t||(t=document.body),this.log(!1,"Traversing DOM...");var e=t.getElementsByTagName("a"),r=[];for(var o in e)e.hasOwnProperty(o)&&(r[o]=e[o]);for(var n in"a"===t.nodeName.toLowerCase()&&(r=[t]),r){if(!r[n]||!r[n].getAttribute("href"))return;var a=i(r[n].getAttribute("href")||"",!0);if(-1!==this.state.hosts.indexOf(a.host))for(var s in this.state.config.tags)this.state.config.tags[s].hosts.indexOf(a.host)>=0&&this.modifyURL(a,r[n],this.state.config.tags[s])}}},{key:"modifyURL",value:function(t,e,r){var n=a.get(e)||{};if(!n.is||n.is!==t.href){var c=t.href;if(this.log(!1,"Discovered URL: "+t.href),t.set("query",o({},t.query,r.query)),"function"==typeof r.modify)try{var f=r.modify(t);t=i(f.href||f,!0)}catch(t){s(!0,t)}for(var u in t=t.href,r.replace)t=t.replace(r.replace[u].from,r.replace[u].to);e.setAttribute("href",t),a.set(e,{was:c,is:t})}}},{key:"attach",value:function(){if(!this.state.attached){var t=document.readyState;if("complete"!==t&&"interactive"!==t)return window.addEventListener("DOMContentLoaded",this.attach.bind(this));this.state.attached=!0,this.traverseNodes(),c?this.observer.observe(document.body,{childList:!0,subtree:!0,attributes:!0,characterData:!0,attributeFilter:["href"]}):this.log(!1,"Browser does not support MutationObserver.")}}},{key:"detach",value:function(){c&&(this.state.attached=!1,this.observer.disconnect(),this.log(!1,"Observer disconnected."))}}]),t}();t.exports=f},function(t,e,r){"use strict";var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},n=function t(e,r){if("object"===(void 0===e?"undefined":o(e)))for(var n in e)e[n]=t(e[n],r);else if("string"==typeof e)for(var i in e=e.split(r))e[i]=e[i].trim();return e};t.exports=function(){var t=document.getElementById("aff-js");if("object"===(void 0===t?"undefined":o(t))&&null!==t){var e=t.getAttribute("data-aff");if("string"==typeof e){var r=n(n(n(n(e,"!"),":"),","),"="),i=[];for(var a in r){var s={hosts:[],query:{}};for(var c in r[a][0])s.hosts.push(r[a][0][c][0]);for(var f in r[a][1])s.query[r[a][1][f][0]]=r[a][1][f][1];i.push(s)}return{tags:i}}}}},function(t,e){var r;r=function(){return this}();try{r=r||Function("return this")()||(0,eval)("this")}catch(t){"object"==typeof window&&(r=window)}t.exports=r},function(t,e,r){"use strict";(function(e){var o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},n=r(1),i=r(4),a=r(3),s=r(0);e.instanceList=e.instanceList||[];var c=function(t){var r=new a(t);return e.instanceList.push(r),r};c.instances=function(){return[].concat(e.instanceList)},c.detachAll=function(){for(var t in e.instanceList)e.instanceList[t].detach()},c.revert=function(){c.detachAll();var t=[].slice.call(document.body.getElementsByTagName("a"));for(var e in t){var r=n.get(t[e]);r&&r.was&&(t[e].setAttribute("href",r.was),n.set(t[e],{}))}};try{var f=i();if("object"===(void 0===f?"undefined":o(f))){var u=c(f);s(!1,u),c.automatic=u,u.attach()}}catch(t){s(!0,t)}t.exports=c}).call(this,r(5))}]);
+module.exports=function(t){var e={};function r(o){if(e[o])return e[o].exports;var n=e[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,r),n.l=!0,n.exports}return r.m=t,r.c=e,r.d=function(t,e,o){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(r.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)r.d(o,n,function(e){return t[e]}.bind(null,n));return o},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=2)}([function(t,e){t.exports=__webpack_require__(3)},function(t,e){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}t.exports=function(t){if("object"===("undefined"==typeof console?"undefined":r(console))){var e=Array.prototype.slice.call(arguments,1),o=t?console.error:console.info;(o=Function.prototype.bind.call(o,console)).apply(console,["[Affiliate] "].concat(e))}}},function(t,e,r){(function(e){function o(t){return(o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var n=r(0),i=r(4),a=r(5),s=r(1);e.instanceList=e.instanceList||[];var c=function(t){var r=new a(t);return e.instanceList.push(r),r};c.instances=function(){return[].concat(e.instanceList)},c.detachAll=function(){for(var t in e.instanceList)e.instanceList[t].detach()},c.revert=function(){c.detachAll();var t=[].slice.call(document.body.getElementsByTagName("a"));for(var e in t){var r=n.get(t[e]);r&&r.was&&(t[e].setAttribute("href",r.was),n.set(t[e],{}))}};try{var f=i();if("object"===o(f)){var u=c(f);s(!1,u),c.automatic=u,u.attach()}}catch(t){s(!0,t)}t.exports=c}).call(this,r(3))},function(t,e){var r;r=function(){return this}();try{r=r||Function("return this")()||(0,eval)("this")}catch(t){"object"==typeof window&&(r=window)}t.exports=r},function(t,e){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var o=function t(e,o){if("object"===r(e))for(var n in e)e[n]=t(e[n],o);else if("string"==typeof e)for(var i in e=e.split(o))e[i]=e[i].trim();return e};t.exports=function(){var t=document.getElementById("aff-js");if("object"===r(t)&&null!==t){var e=t.getAttribute("data-aff");if("string"==typeof e){var n=o(o(o(o(e,"!"),":"),","),"="),i=[];for(var a in n){var s={hosts:[],query:{}};for(var c in n[a][0])s.hosts.push(n[a][0][c][0]);for(var f in n[a][1])s.query[n[a][1][f][0]]=n[a][1][f][1];i.push(s)}return{tags:i}}}}},function(t,e,r){function o(){return(o=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(t[o]=r[o])}return t}).apply(this,arguments)}function n(t,e){for(var r=0;r<e.length;r++){var o=e[r];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}var i=r(6),a=r(0),s=r(1),c=!(void 0===window.MutationObserver),f=function(){function t(e){var r=this;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e=o({tags:[]},e);var n=[];for(var i in e.tags)"string"==typeof e.tags[i].hosts&&(e.tags[i].hosts=[e.tags[i].hosts]),e.tags[i]=o({hosts:[],query:{},replace:[]},e.tags[i]),n=n.concat(e.tags[i].hosts);this.log=e.log?s:function(){},this.log(!1,"New Instance",e),c&&(this.observer=new window.MutationObserver(function(t){var e=!1;for(var o in t){if("attributes"===t[o].type){if("href"!==t[o].attributeName)continue;var n=t[o].target.getAttribute("href"),i=a.get(t[o].target)||{};if(i.is&&i.is===n)continue}e||(r.log(!1,"DOM Mutation"),e=!0),r.traverseNodes(t[o].target)}})),this.state={attached:!1,config:e,hosts:n}}return function(t,e,r){e&&n(t.prototype,e),r&&n(t,r)}(t,[{key:"traverseNodes",value:function(t){t||(t=document.body),this.log(!1,"Traversing DOM...");var e=t.getElementsByTagName("a"),r=[];for(var o in e)e.hasOwnProperty(o)&&(r[o]=e[o]);for(var n in"a"===t.nodeName.toLowerCase()&&(r=[t]),r){if(!r[n]||!r[n].getAttribute("href"))return;var a=i(r[n].getAttribute("href")||"",!0);if(-1!==this.state.hosts.indexOf(a.host))for(var s in this.state.config.tags)this.state.config.tags[s].hosts.indexOf(a.host)>=0&&this.modifyURL(a,r[n],this.state.config.tags[s])}}},{key:"modifyURL",value:function(t,e,r){var n=a.get(e)||{};if(!n.is||n.is!==t.href){var c=t.href;if(this.log(!1,"Discovered URL: "+t.href),t.set("query",o({},t.query,r.query)),"function"==typeof r.modify)try{var f=r.modify(t);t=i(f.href||f,!0)}catch(t){s(!0,t)}for(var u in t=t.href,r.replace)t=t.replace(r.replace[u].from,r.replace[u].to);e.setAttribute("href",t),a.set(e,{was:c,is:t})}}},{key:"attach",value:function(){if(!this.state.attached){var t=document.readyState;if("complete"!==t&&"interactive"!==t&&"loaded"!==t)return window.addEventListener("DOMContentLoaded",this.attach.bind(this));this.state.attached=!0,this.traverseNodes(),c?this.observer.observe(document.body,{childList:!0,subtree:!0,attributes:!0,characterData:!0,attributeFilter:["href"]}):this.log(!1,"Browser does not support MutationObserver.")}}},{key:"detach",value:function(){c&&(this.state.attached=!1,this.observer.disconnect(),this.log(!1,"Observer disconnected."))}}]),t}();t.exports=f},function(t,e){t.exports=__webpack_require__(5)}]);
 
 /***/ }),
 /* 3 */
@@ -325,6 +325,9 @@ var required = __webpack_require__(7)
 var rules = [
   ['#', 'hash'],                        // Extract from the back.
   ['?', 'query'],                       // Extract from the back.
+  function sanitize(address) {          // Sanitize what is left of the address
+    return address.replace('\\', '/');
+  },
   ['/', 'pathname'],                    // Extract from the back.
   ['@', 'auth', 1],                     // Extract from the front.
   [NaN, 'host', undefined, 1, 1],       // Set left over value.
@@ -352,7 +355,7 @@ var ignore = { hash: 1, query: 1 };
  *
  * @param {Object|String} loc Optional default location object.
  * @returns {Object} lolcation object.
- * @api public
+ * @public
  */
 function lolcation(loc) {
   var location = global && global.location || {};
@@ -363,9 +366,9 @@ function lolcation(loc) {
     , key;
 
   if ('blob:' === loc.protocol) {
-    finaldestination = new URL(unescape(loc.pathname), {});
+    finaldestination = new Url(unescape(loc.pathname), {});
   } else if ('string' === type) {
-    finaldestination = new URL(loc, {});
+    finaldestination = new Url(loc, {});
     for (key in ignore) delete finaldestination[key];
   } else if ('object' === type) {
     for (key in loc) {
@@ -394,7 +397,7 @@ function lolcation(loc) {
  *
  * @param {String} address URL we want to extract from.
  * @return {ProtocolExtract} Extracted information.
- * @api private
+ * @private
  */
 function extractProtocol(address) {
   var match = protocolre.exec(address);
@@ -412,7 +415,7 @@ function extractProtocol(address) {
  * @param {String} relative Pathname of the relative URL.
  * @param {String} base Pathname of the base URL.
  * @return {String} Resolved pathname.
- * @api private
+ * @private
  */
 function resolve(relative, base) {
   var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/'))
@@ -445,15 +448,18 @@ function resolve(relative, base) {
  * create an actual constructor as it's much more memory efficient and
  * faster and it pleases my OCD.
  *
+ * It is worth noting that we should not use `URL` as class name to prevent
+ * clashes with the global URL instance that got introduced in browsers.
+ *
  * @constructor
  * @param {String} address URL we want to parse.
  * @param {Object|String} location Location defaults for relative paths.
  * @param {Boolean|Function} parser Parser for the query string.
- * @api public
+ * @private
  */
-function URL(address, location, parser) {
-  if (!(this instanceof URL)) {
-    return new URL(address, location, parser);
+function Url(address, location, parser) {
+  if (!(this instanceof Url)) {
+    return new Url(address, location, parser);
   }
 
   var relative, extracted, parse, instruction, index, key
@@ -495,10 +501,16 @@ function URL(address, location, parser) {
   // When the authority component is absent the URL starts with a path
   // component.
   //
-  if (!extracted.slashes) instructions[2] = [/(.*)/, 'pathname'];
+  if (!extracted.slashes) instructions[3] = [/(.*)/, 'pathname'];
 
   for (; i < instructions.length; i++) {
     instruction = instructions[i];
+
+    if (typeof instruction === 'function') {
+      address = instruction(address);
+      continue;
+    }
+
     parse = instruction[0];
     key = instruction[1];
 
@@ -589,8 +601,8 @@ function URL(address, location, parser) {
  *                               used to parse the query.
  *                               When setting the protocol, double slash will be
  *                               removed from the final url if it is true.
- * @returns {URL}
- * @api public
+ * @returns {URL} URL instance for chaining.
+ * @public
  */
 function set(part, value, fn) {
   var url = this;
@@ -675,8 +687,8 @@ function set(part, value, fn) {
  * Transform the properties back in to a valid and full URL string.
  *
  * @param {Function} stringify Optional query stringify function.
- * @returns {String}
- * @api public
+ * @returns {String} Compiled version of the URL.
+ * @public
  */
 function toString(stringify) {
   if (!stringify || 'function' !== typeof stringify) stringify = qs.stringify;
@@ -705,17 +717,17 @@ function toString(stringify) {
   return result;
 }
 
-URL.prototype = { set: set, toString: toString };
+Url.prototype = { set: set, toString: toString };
 
 //
 // Expose the URL parser and some additional properties that might be useful for
 // others or testing.
 //
-URL.extractProtocol = extractProtocol;
-URL.location = lolcation;
-URL.qs = qs;
+Url.extractProtocol = extractProtocol;
+Url.location = lolcation;
+Url.qs = qs;
 
-module.exports = URL;
+module.exports = Url;
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(6)))
 

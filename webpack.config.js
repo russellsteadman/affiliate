@@ -19,14 +19,14 @@ module.exports = {
                 loader: 'babel-loader',
                 options: {
                     presets: [
-                      ['env', {
+                      ['@babel/preset-env', {
                         'targets': {
                           'browsers': ['last 4 versions', 'safari >= 7', 'ie >= 9']
                         }
                       }]
                     ],
                     plugins: [
-                      'transform-object-rest-spread'
+                      require('babel-plugin-transform-object-rest-spread')
                     ]
                 }
             }

@@ -1,5 +1,8 @@
+// url-parse parses and modifies urls
 const parseURL = require('url-parse');
+// docile stores data relative to DOM elements
 const Docile = require('docile');
+// log safely implements console.log for older browsers
 const log = require('./log');
 
 // Check for MutationObserver
@@ -7,39 +10,69 @@ const canObserve = !(typeof window.MutationObserver === 'undefined');
 
 class Affiliate {
     constructor(config) {
+        // Extend the configuration
         config = {...{
             tags: []
         }, ...config};
     
+        // Make a list of all matching hosts
         let hosts = [];
+
         for (let i in config.tags) {
+            // Convert a single host to an array
+            if (typeof config.tags[i].hosts === 'string') config.tags[i].hosts = [config.tags[i].hosts];
+
+            // Extend proper tag configuration
             config.tags[i] = {...{
                 hosts: [],
                 query: {},
                 replace: []
             }, ...config.tags[i]};
+
+            // Append hosts to full list
             hosts = hosts.concat(config.tags[i].hosts);
         }
     
+        // Set logging function
         this.log = config.log ? log : () => {};
 
         this.log(false, 'New Instance', config);
 
+        // Check is MutationObserver is supported
         if (canObserve) {
+            // Initialize MutationObserver
             this.observer = new window.MutationObserver((mutations) => {
-                this.log(false, 'DOM Mutation');
+                // This function is called for every DOM mutation
+
+                // Has a mutation been logged
+                let emitted = false;
+
                 for (let i in mutations) {
+                    // If the attributes of the link have been modified
                     if (mutations[i].type === 'attributes') {
+                        // Skip links without an href
                         if (mutations[i].attributeName !== 'href') continue;
+
                         let href = mutations[i].target.getAttribute('href');
                         let linkData = Docile.get(mutations[i].target) || {};
+
+                        // Skip links without a modified href
                         if (linkData.is && linkData.is === href) continue;
                     }
+
+                    // Only calls on first mutation
+                    if (!emitted) {
+                        this.log(false, 'DOM Mutation');
+                        emitted = true;
+                    }
+
+                    // Scan the node and subnodes if there are any
                     this.traverseNodes(mutations[i].target);
                 }
             });
         }
 
+        // Set internal state
         this.state = {
             attached: false,
             config,
@@ -67,7 +100,11 @@ class Affiliate {
         for (let o in nodes) {
             // Check if it is actually linking
             if (!nodes[o] || !nodes[o].getAttribute('href')) return;
+
+            // Parse the URL via url-parse
             let url = parseURL(nodes[o].getAttribute('href') || '', true);
+
+            // Only modify hosts provided.
             if (this.state.hosts.indexOf(url.host) === -1) continue;
             for (let i in this.state.config.tags) {
                 if (this.state.config.tags[i].hosts.indexOf(url.host) >= 0) {
@@ -106,7 +143,7 @@ class Affiliate {
             url = url.replace(tag.replace[i].from, tag.replace[i].to);
         }
 
-        // Update the href tag
+        // Update the href tag and save the url to the DOM node
         node.setAttribute('href', url);
         Docile.set(node, {
             was: originalURL,
@@ -115,18 +152,25 @@ class Affiliate {
     }
 
     attach() {
+        // Cannot attach twice
         if (this.state.attached) return;
 
+        // Get readyState, or the loading state of the DOM
         let { readyState } = document;
 
-        if (readyState === 'complete' || readyState === 'interactive') {
+        if (readyState === 'complete' || readyState === 'interactive' || readyState === 'loaded') {
+            // Set attached to true
             this.state.attached = true;
+
+            // Run through the entire body tag
             this.traverseNodes();
         } else {
+            // Wait until the DOM loads
             return window.addEventListener('DOMContentLoaded', this.attach.bind(this));
         }
 
         if (canObserve) {
+            // Attach the observer
             this.observer.observe(document.body, {
                 childList: true,
                 subtree: true,
@@ -140,6 +184,7 @@ class Affiliate {
     }
 
     detach() {
+        // Detach the mutation observer
         if (!canObserve) return;
         this.state.attached = false;
         this.observer.disconnect();

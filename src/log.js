@@ -1,3 +1,4 @@
+/* log handles formatting and doesn't throw errors is console is undefined */
 module.exports = function (isError) {
     if (typeof console === 'object') {
         let args = Array.prototype.slice.call(arguments, 1);

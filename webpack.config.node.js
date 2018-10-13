@@ -17,16 +17,16 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
                 options: {
-                    presets: [
-                      ['env', {
-                        targets: {
-                          browsers: ['last 4 versions', 'safari >= 7', 'ie >= 9']
-                        }
-                      }]
-                    ],
-                    plugins: [
-                      'transform-object-rest-spread'
-                    ]
+                  presets: [
+                    ['@babel/preset-env', {
+                      'targets': {
+                        'browsers': ['last 4 versions', 'safari >= 7', 'ie >= 9']
+                      }
+                    }]
+                  ],
+                  plugins: [
+                    require('babel-plugin-transform-object-rest-spread')
+                  ]
                 }
             }
         }
