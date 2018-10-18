@@ -10,13 +10,13 @@ Make sure [Affiliate](https://affiliate.js.org/) is already installed. Read the 
 ```bash
 $ npm i -S affiliate affiliate-plugin-amazon
 $ yarn add affiliate affiliate-plugin-amazon
-$ bower install -S affiliate affiliate-plugin-amazon
 ```
 
 Or use a CDN
 ```html
-<script src="https://cdn.jsdelivr.net/npm/affiliate/dist/affiliate.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/affiliate-plugin-amazon/dist/plugin.js"></script>
+<!-- Replace <VERSION> with your intended versions, e.g. 2.0.1 and 2.0.0 -->
+<script src="https://cdn.jsdelivr.net/npm/affiliate@<VERSION>/dist/affiliate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate-plugin-amazon@<VERSION>/dist/plugin.js"></script>
 ```
 
 ## What It Can Do
@@ -45,10 +45,10 @@ Or url modification can be disabled:
 ## Documentation
 
 ```js
-var Affiliate = require('affiliate'); 
-var AffiliatePluginAmazon = require('affiliate-plugin-amazon'); 
+const Affiliate = require('affiliate'); 
+const AffiliatePluginAmazon = require('affiliate-plugin-amazon'); 
 
-var amazonAff = AffiliatePluginAmazon(Affiliate, {
+let amazonAff = AffiliatePluginAmazon(Affiliate, {
     tags: {
         us: '', // for USA, required
         gb: '', // for UK

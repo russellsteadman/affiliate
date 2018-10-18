@@ -4,11 +4,11 @@
 
 ## Making plugins
 
-Plugins are actually very simple to make. Simply accept the global `Affiliate` function and output an instance.
+Plugins are simply functions that accept global `Affiliate` function and output an instance.
 
 Here's a simple example:
 ```js
-var plugin = function (Affiliate, mytag) {
+const plugin = (Affiliate, mytag) => {
     return Affiliate({
         tags: [
             {

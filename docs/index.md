@@ -14,7 +14,7 @@ $ yarn add affiliate
 
 Or use a CDN
 ```html
-<!-- Replace <VERSION> with your intended version, e.g. 1.2.1 -->
+<!-- Replace <VERSION> with your intended version, e.g. 2.0.1 -->
 <script src="https://cdn.jsdelivr.net/npm/affiliate@<VERSION>/dist/affiliate.js"></script>
 ```
 
@@ -121,8 +121,8 @@ A simplified codeless solution might better suit some blogging-style sites.
 
 Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
 ```html
-<!-- Replace 1.2 with your intended version -->
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@1.2/dist/affiliate.js" async id="aff-js"></script>
+<!-- Replace 2.0 with your intended version -->
+<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@2.0/dist/affiliate.js" async id="aff-js"></script>
 ```
 
 #### data-aff Syntax
@@ -152,7 +152,3 @@ If you like it then you gotta [put a star on it](https://github.com/teamtofu/aff
 ## License
 
 MIT (C) [Russell Steadman](https://teamtofu.github.io/contact/). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
-
-## Support Me
-
-Like this project? Buy me a [cup of coffee](https://www.paypal.me/RussellSteadman/3). &#x2615; Here are more of my [projects](https://teamtofu.github.io/).
