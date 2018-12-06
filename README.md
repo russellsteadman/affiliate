@@ -78,7 +78,7 @@ amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com
 
 ## Testing
 
-Affiliate is tested using Jasmine. The test of the minified packages is available [here](https://affiliate.js.org/test/index.html) and the webpack package [here](https://affiliate.js.org/test/webpack.html).
+Affiliate is tested using Jasmine. The test for the minified package is available [here](https://affiliate.js.org/test/index.html) and an example webpack package [here](https://affiliate.js.org/test/webpack.html).
 
 ### Big Thanks
 
@@ -86,9 +86,13 @@ Affiliate is tested using Jasmine. The test of the minified packages is availabl
 
 Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com/)!
 
+## Left with Questions?
+
+If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/teamtofu/affiliate/issues/new) detailing what needs to be improved. It will be addressed quickly.
+
 ## Star This Project
 
-If you like it then you gotta [put a star on it](https://github.com/teamtofu/affiliate). &#x1f609;&#x1f31f;
+Like this project? Let me know by [putting a star on it](https://github.com/teamtofu/affiliate). &#x1f609;&#x1f31f;
 
 ## License
 
