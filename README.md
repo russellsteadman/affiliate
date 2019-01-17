@@ -1,19 +1,19 @@
 # Affiliate
 Affiliate is a platform agnostic link affiliator. Simplify affiliating links with automatic affiliation in the browser. Affiliate works with libraries that mutate the DOM after the page loads, including React.
 
-[![&#x1f31f; Star me on Github](https://img.shields.io/github/stars/teamtofu/affiliate.svg)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://img.shields.io/npm/dt/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified](https://img.shields.io/bundlephobia/min/affiliate.svg)](https://www.npmjs.com/package/affiliate) [![Bundle small when minified and gunzipped](https://img.shields.io/bundlephobia/minzip/affiliate.svg)](https://www.npmjs.com/package/affiliate)
+[![&#x1f31f; Star me on Github](https://badgen.net/github/stars/teamtofu/affiliate)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://badgen.net/npm/dt/affiliate)](https://www.npmjs.com/package/affiliate) [![Use via CDN](https://badgen.net/jsdelivr/hits/npm/affiliate)](https://www.jsdelivr.com/package/npm/affiliate) [![Bundle small when minified](https://badgen.net/bundlephobia/min/affiliate)](https://bundlephobia.com/result?p=affiliate) [![Bundle small when minified and gunzipped](https://badgen.net/bundlephobia/minzip/affiliate)](https://bundlephobia.com/result?p=affiliate)
 
 ## Installation
 
 ```bash
-$ npm i -S affiliate
+$ npm install --save affiliate
 $ yarn add affiliate
 ```
 
 Or use a CDN
 ```html
-<!-- Replace <VERSION> with your intended version, e.g. 2.0.1 -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@<VERSION>/dist/affiliate.js"></script>
+<!-- Replace 2.0.2 with your intended version -->
+<script src="https://cdn.jsdelivr.net/npm/affiliate@2.0.2/dist/affiliate.js"></script>
 ```
 
 ## What It Can Do

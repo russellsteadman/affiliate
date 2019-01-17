@@ -8,15 +8,14 @@ Make sure [Affiliate](https://affiliate.js.org/) is already installed. Read the 
 ## Installation
 
 ```bash
-$ npm i -S affiliate affiliate-plugin-amazon
+$ npm install --save affiliate affiliate-plugin-amazon
 $ yarn add affiliate affiliate-plugin-amazon
 ```
 
 Or use a CDN
 ```html
-<!-- Replace <VERSION> with your intended versions, e.g. 2.0.1 and 2.0.0 -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@<VERSION>/dist/affiliate.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/affiliate-plugin-amazon@<VERSION>/dist/plugin.js"></script>
+<!-- Replace 2.0.2 and 2.0.0 with your intended versions -->
+<script src="https://cdn.jsdelivr.net/combine/npm/affiliate@2.0.2/dist/affiliate.js,npm/affiliate-plugin-amazon@2.0.0/dist/plugin.js"></script>
 ```
 
 ## What It Can Do
