@@ -5,11 +5,11 @@
   "main": "index.js",
   "repository": "https://github.com/teamtofu/affiliate.git",
   "homepage": "https://affiliate.js.org/",
-  "author": "Russell Steadman <russell@unatetra.com> (https://teamtofu.github.io/)",
+  "author": "Russell Steadman <steadman.21@osu.edu> (https://www.russellsteadman.com/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/teamtofu/affiliate/issues",
-    "email": "russell@unatetra.com"
+    "email": "steadman.21@osu.edu"
   },
   "private": false,
   "devDependencies": {

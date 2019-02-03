@@ -96,4 +96,4 @@ Like this project? Let me know by [putting a star on it](https://github.com/team
 
 ## License
 
-MIT (C) [Russell Steadman](https://teamtofu.github.io/contact/). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=readme_copy). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.

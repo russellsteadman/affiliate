@@ -74,8 +74,4 @@ amazonAff.attach(); // this will start affiliation
 
 ## License
 
-MIT (C) [Russell Steadman](https://teamtofu.github.io/contact). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate-plugin-amazon/blob/master/LICENSE) file.
-
-## Support Me
-
-Like this project? Buy me a [cup of coffee](https://www.paypal.me/RussellSteadman/3). &#x2615; Here are more of my [projects](https://teamtofu.github.io/).
+MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_amz_repo&utm_medium=copyright). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate-plugin-amazon/blob/master/LICENSE) file.
