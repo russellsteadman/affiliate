@@ -12,8 +12,8 @@ $ yarn add affiliate
 
 Or use a CDN
 ```html
-<!-- Replace 2.0.2 with your intended version -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@2.0.2/dist/affiliate.js"></script>
+<!-- Replace 2.0.3 with your intended version -->
+<script src="https://cdn.jsdelivr.net/npm/affiliate@2.0.3/dist/affiliate.js"></script>
 ```
 
 ## Configuration

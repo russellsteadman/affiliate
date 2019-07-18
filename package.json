@@ -1,6 +1,6 @@
 {
   "name": "affiliate",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A platform agnostic tool to quickly add affiliate links onto your website",
   "main": "index.js",
   "repository": "https://github.com/teamtofu/affiliate.git",

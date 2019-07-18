@@ -112,7 +112,7 @@ module.exports = __webpack_require__(2);
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports=function(t){var e={};function r(o){if(e[o])return e[o].exports;var n=e[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,r),n.l=!0,n.exports}return r.m=t,r.c=e,r.d=function(t,e,o){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(r.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)r.d(o,n,function(e){return t[e]}.bind(null,n));return o},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=2)}([function(t,e){t.exports=__webpack_require__(3)},function(t,e){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}t.exports=function(t){if("object"===("undefined"==typeof console?"undefined":r(console))){var e=Array.prototype.slice.call(arguments,1),o=t?console.error:console.info;(o=Function.prototype.bind.call(o,console)).apply(console,["[Affiliate] "].concat(e))}}},function(t,e,r){(function(e){function o(t){return(o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var n=r(0),i=r(4),a=r(5),s=r(1);e.instanceList=e.instanceList||[];var c=function(t){var r=new a(t);return e.instanceList.push(r),r};c.instances=function(){return[].concat(e.instanceList)},c.detachAll=function(){for(var t in e.instanceList)e.instanceList[t].detach()},c.revert=function(){c.detachAll();var t=[].slice.call(document.body.getElementsByTagName("a"));for(var e in t){var r=n.get(t[e]);r&&r.was&&(t[e].setAttribute("href",r.was),n.set(t[e],{}))}};try{var f=i();if("object"===o(f)){var u=c(f);s(!1,u),c.automatic=u,u.attach()}}catch(t){s(!0,t)}t.exports=c}).call(this,r(3))},function(t,e){var r;r=function(){return this}();try{r=r||new Function("return this")()}catch(t){"object"==typeof window&&(r=window)}t.exports=r},function(t,e){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var o=function t(e,o){if("object"===r(e))for(var n in e)e[n]=t(e[n],o);else if("string"==typeof e)for(var i in e=e.split(o))e[i]=e[i].trim();return e};t.exports=function(){var t=document.getElementById("aff-js");if("object"===r(t)&&null!==t){var e=t.getAttribute("data-aff");if("string"==typeof e){var n=o(o(o(o(e,"!"),":"),","),"="),i=[];for(var a in n){var s={hosts:[],query:{}};for(var c in n[a][0])s.hosts.push(n[a][0][c][0]);for(var f in n[a][1])s.query[n[a][1][f][0]]=n[a][1][f][1];i.push(s)}return{tags:i}}}}},function(t,e,r){function o(){return(o=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(t[o]=r[o])}return t}).apply(this,arguments)}function n(t,e){for(var r=0;r<e.length;r++){var o=e[r];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}var i=r(6),a=r(0),s=r(1),c=!(void 0===window.MutationObserver),f=function(){function t(e){var r=this;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e=o({tags:[]},e);var n=[];for(var i in e.tags)"string"==typeof e.tags[i].hosts&&(e.tags[i].hosts=[e.tags[i].hosts]),e.tags[i]=o({hosts:[],query:{},replace:[]},e.tags[i]),n=n.concat(e.tags[i].hosts);this.log=e.log?s:function(){},this.log(!1,"New Instance",e),c&&(this.observer=new window.MutationObserver(function(t){var e=!1;for(var o in t){if("attributes"===t[o].type){if("href"!==t[o].attributeName)continue;var n=t[o].target.getAttribute("href"),i=a.get(t[o].target)||{};if(i.is&&i.is===n)continue}e||(r.log(!1,"DOM Mutation"),e=!0),r.traverseNodes(t[o].target)}})),this.state={attached:!1,config:e,hosts:n}}var e,r,f;return e=t,(r=[{key:"traverseNodes",value:function(t){t||(t=document.body),this.log(!1,"Traversing DOM...");var e=t.getElementsByTagName("a"),r=[];for(var o in e)e.hasOwnProperty(o)&&(r[o]=e[o]);for(var n in"a"===t.nodeName.toLowerCase()&&(r=[t]),r){if(!r[n]||!r[n].getAttribute("href"))return;var a=i(r[n].getAttribute("href")||"",!0);if(-1!==this.state.hosts.indexOf(a.host))for(var s in this.state.config.tags)this.state.config.tags[s].hosts.indexOf(a.host)>=0&&this.modifyURL(a,r[n],this.state.config.tags[s])}}},{key:"modifyURL",value:function(t,e,r){var n=a.get(e)||{};if(!n.is||n.is!==t.href){var c=t.href;if(this.log(!1,"Discovered URL: "+t.href),t.set("query",o({},t.query,r.query)),"function"==typeof r.modify)try{var f=r.modify(t);t=i(f.href||f,!0)}catch(t){s(!0,t)}for(var u in t=t.href,r.replace)t=t.replace(r.replace[u].from,r.replace[u].to);e.setAttribute("href",t),a.set(e,{was:c,is:t})}}},{key:"attach",value:function(){if(!this.state.attached){var t=document.readyState;if("complete"!==t&&"interactive"!==t&&"loaded"!==t)return window.addEventListener("DOMContentLoaded",this.attach.bind(this));this.state.attached=!0,this.traverseNodes(),c?this.observer.observe(document.body,{childList:!0,subtree:!0,attributes:!0,characterData:!0,attributeFilter:["href"]}):this.log(!1,"Browser does not support MutationObserver.")}}},{key:"detach",value:function(){c&&(this.state.attached=!1,this.observer.disconnect(),this.log(!1,"Observer disconnected."))}}])&&n(e.prototype,r),f&&n(e,f),t}();t.exports=f},function(t,e){t.exports=__webpack_require__(5)}]);
+module.exports=function(t){var e={};function r(o){if(e[o])return e[o].exports;var n=e[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,r),n.l=!0,n.exports}return r.m=t,r.c=e,r.d=function(t,e,o){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(t,e){if(1&e&&(t=r(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(r.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var n in t)r.d(o,n,function(e){return t[e]}.bind(null,n));return o},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=2)}([function(t,e){t.exports=__webpack_require__(3)},function(t,e){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}t.exports=function(t){if("object"===("undefined"==typeof console?"undefined":r(console))){var e=Array.prototype.slice.call(arguments,1),o=t?console.error:console.log;(o=Function.prototype.bind.call(o,console)).apply(console,["[Affiliate] "].concat(e))}}},function(t,e,r){(function(e){function o(t){return(o="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var n=r(0),i=r(4),a=r(5),s=r(1);e.instanceList=e.instanceList||[];var c=function(t){var r=new a(t);return e.instanceList.push(r),r};c.instances=function(){return[].concat(e.instanceList)},c.detachAll=function(){for(var t in e.instanceList)e.instanceList[t].detach()},c.revert=function(){c.detachAll();var t=[].slice.call(document.body.getElementsByTagName("a"));for(var e in t){var r=n.get(t[e]);r&&r.was&&(t[e].setAttribute("href",r.was),n.set(t[e],{}))}};try{var f=i();if("object"===o(f)){var u=c(f);s(!1,u),c.automatic=u,u.attach()}}catch(t){s(!0,t)}t.exports=c}).call(this,r(3))},function(t,e){var r;r=function(){return this}();try{r=r||new Function("return this")()}catch(t){"object"==typeof window&&(r=window)}t.exports=r},function(t,e){function r(t){return(r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t})(t)}var o=function t(e,o){if("object"===r(e))for(var n in e)e[n]=t(e[n],o);else if("string"==typeof e)for(var i in e=e.split(o))e[i]=e[i].trim();return e};t.exports=function(){var t=document.getElementById("aff-js");if("object"===r(t)&&null!==t){var e=t.getAttribute("data-aff");if("string"==typeof e){var n=o(o(o(o(e,"!"),":"),","),"="),i=[];for(var a in n){var s={hosts:[],query:{}};for(var c in n[a][0])s.hosts.push(n[a][0][c][0]);for(var f in n[a][1])s.query[n[a][1][f][0]]=n[a][1][f][1];i.push(s)}return{tags:i}}}}},function(t,e,r){function o(){return(o=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var o in r)Object.prototype.hasOwnProperty.call(r,o)&&(t[o]=r[o])}return t}).apply(this,arguments)}function n(t,e){for(var r=0;r<e.length;r++){var o=e[r];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}var i=r(6),a=r(0),s=r(1),c=!(void 0===window.MutationObserver),f=function(){function t(e){var r=this;!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,t),e=o({tags:[]},e);var n=[];for(var i in e.tags)"string"==typeof e.tags[i].hosts&&(e.tags[i].hosts=[e.tags[i].hosts]),e.tags[i]=o({hosts:[],query:{},replace:[]},e.tags[i]),n=n.concat(e.tags[i].hosts);this.log=e.log?s:function(){},this.log(!1,"New Instance",e),c&&(this.observer=new window.MutationObserver(function(t){var e=!1;for(var o in t){if("attributes"===t[o].type){if("href"!==t[o].attributeName)continue;var n=t[o].target.getAttribute("href"),i=a.get(t[o].target)||{};if(i.is&&i.is===n)continue}e||(r.log(!1,"DOM Mutation"),e=!0),r.traverseNodes(t[o].target)}})),this.state={attached:!1,config:e,hosts:n}}var e,r,f;return e=t,(r=[{key:"traverseNodes",value:function(t){t||(t=document.body),this.log(!1,"Traversing DOM...");var e=t.getElementsByTagName("a"),r=[];for(var o in e)e.hasOwnProperty(o)&&(r[o]=e[o]);for(var n in"a"===t.nodeName.toLowerCase()&&(r=[t]),r)if(r[n]&&r[n].getAttribute("href")){var a=i(r[n].getAttribute("href")||"",!0);if(-1!==this.state.hosts.indexOf(a.host))for(var s in this.state.config.tags)this.state.config.tags[s].hosts.indexOf(a.host)>=0&&this.modifyURL(a,r[n],this.state.config.tags[s])}}},{key:"modifyURL",value:function(t,e,r){var n=a.get(e)||{};if(!n.is||n.is!==t.href){var c=t.href;if(this.log(!1,"Discovered URL: "+t.href),t.set("query",o({},t.query,r.query)),"function"==typeof r.modify)try{var f=r.modify(t);t=i(f.href||f,!0)}catch(t){s(!0,t)}for(var u in t=t.href,r.replace)t=t.replace(r.replace[u].from,r.replace[u].to);e.setAttribute("href",t),a.set(e,{was:c,is:t})}}},{key:"attach",value:function(){if(!this.state.attached){var t=document.readyState;if("complete"!==t&&"interactive"!==t&&"loaded"!==t)return window.addEventListener("DOMContentLoaded",this.attach.bind(this));this.state.attached=!0,this.traverseNodes(),c?this.observer.observe(document.body,{childList:!0,subtree:!0,attributes:!0,characterData:!0,attributeFilter:["href"]}):this.log(!1,"Browser does not support MutationObserver.")}}},{key:"detach",value:function(){c&&(this.state.attached=!1,this.observer.disconnect(),this.log(!1,"Observer disconnected."))}}])&&n(e.prototype,r),f&&n(e,f),t}();t.exports=f},function(t,e){t.exports=__webpack_require__(5)}]);
 
 /***/ }),
 /* 3 */
@@ -307,8 +307,20 @@ module.exports = Docile;
 
 var required = __webpack_require__(7)
   , qs = __webpack_require__(8)
+  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//
   , protocolre = /^([a-z][a-z0-9.+-]*:)?(\/\/)?([\S\s]*)/i
-  , slashes = /^[A-Za-z][A-Za-z0-9+-.]*:\/\//;
+  , whitespace = '[\\x09\\x0A\\x0B\\x0C\\x0D\\x20\\xA0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A\\u202F\\u205F\\u3000\\u2028\\u2029\\uFEFF]'
+  , left = new RegExp('^'+ whitespace +'+');
+
+/**
+ * Trim a given string.
+ *
+ * @param {String} str String to trim.
+ * @public
+ */
+function trimLeft(str) {
+  return (str ? str : '').toString().replace(left, '');
+}
 
 /**
  * These are the parse rules for the URL parser, it informs the parser
@@ -407,6 +419,7 @@ function lolcation(loc) {
  * @private
  */
 function extractProtocol(address) {
+  address = trimLeft(address);
   var match = protocolre.exec(address);
 
   return {
@@ -425,6 +438,8 @@ function extractProtocol(address) {
  * @private
  */
 function resolve(relative, base) {
+  if (relative === '') return base;
+
   var path = (base || '/').split('/').slice(0, -1).concat(relative.split('/'))
     , i = path.length
     , last = path[i - 1]
@@ -465,6 +480,8 @@ function resolve(relative, base) {
  * @private
  */
 function Url(address, location, parser) {
+  address = trimLeft(address);
+
   if (!(this instanceof Url)) {
     return new Url(address, location, parser);
   }
@@ -732,6 +749,7 @@ Url.prototype = { set: set, toString: toString };
 //
 Url.extractProtocol = extractProtocol;
 Url.location = lolcation;
+Url.trimLeft = trimLeft;
 Url.qs = qs;
 
 module.exports = Url;
@@ -816,17 +834,37 @@ module.exports = function required(port, protocol) {
 "use strict";
 
 
-var has = Object.prototype.hasOwnProperty;
+var has = Object.prototype.hasOwnProperty
+  , undef;
 
 /**
  * Decode a URI encoded string.
  *
  * @param {String} input The URI encoded string.
- * @returns {String} The decoded string.
+ * @returns {String|Null} The decoded string.
  * @api private
  */
 function decode(input) {
-  return decodeURIComponent(input.replace(/\+/g, ' '));
+  try {
+    return decodeURIComponent(input.replace(/\+/g, ' '));
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Attempts to encode a given input.
+ *
+ * @param {String} input The string that needs to be encoded.
+ * @returns {String|Null} The encoded string.
+ * @api private
+ */
+function encode(input) {
+  try {
+    return encodeURIComponent(input);
+  } catch (e) {
+    return null;
+  }
 }
 
 /**
@@ -850,7 +888,10 @@ function querystring(query) {
     // methods like `toString` or __proto__ are not overriden by malicious
     // querystrings.
     //
-    if (key in result) continue;
+    // In the case if failed decoding, we want to omit the key/value pairs
+    // from the result.
+    //
+    if (key === null || value === null || key in result) continue;
     result[key] = value;
   }
 
@@ -868,16 +909,36 @@ function querystring(query) {
 function querystringify(obj, prefix) {
   prefix = prefix || '';
 
-  var pairs = [];
+  var pairs = []
+    , value
+    , key;
 
   //
   // Optionally prefix with a '?' if needed
   //
   if ('string' !== typeof prefix) prefix = '?';
 
-  for (var key in obj) {
+  for (key in obj) {
     if (has.call(obj, key)) {
-      pairs.push(encodeURIComponent(key) +'='+ encodeURIComponent(obj[key]));
+      value = obj[key];
+
+      //
+      // Edge cases where we actually want to encode the value to an empty
+      // string instead of the stringified value.
+      //
+      if (!value && (value === null || value === undef || isNaN(value))) {
+        value = '';
+      }
+
+      key = encodeURIComponent(key);
+      value = encodeURIComponent(value);
+
+      //
+      // If we failed to encode the strings, we should bail out as we don't
+      // want to add invalid strings to the query.
+      //
+      if (key === null || value === null) continue;
+      pairs.push(key +'='+ value);
     }
   }
 

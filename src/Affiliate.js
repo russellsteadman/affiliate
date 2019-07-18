@@ -11,9 +11,10 @@ const canObserve = !(typeof window.MutationObserver === 'undefined');
 class Affiliate {
     constructor(config) {
         // Extend the configuration
-        config = {...{
-            tags: []
-        }, ...config};
+        config = {
+            tags: [],
+            ...config,
+        };
     
         // Make a list of all matching hosts
         let hosts = [];
@@ -99,7 +100,7 @@ class Affiliate {
         // Go through each link
         for (let o in nodes) {
             // Check if it is actually linking
-            if (!nodes[o] || !nodes[o].getAttribute('href')) return;
+            if (!nodes[o] || !nodes[o].getAttribute('href')) continue;
 
             // Parse the URL via url-parse
             let url = parseURL(nodes[o].getAttribute('href') || '', true);
