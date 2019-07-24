@@ -9,7 +9,7 @@ Plugins are simply functions that accept global `Affiliate` function and output 
 Here's a simple example:
 ```js
 const plugin = (Affiliate, mytag) => {
-    return Affiliate({
+    return Affiliate.create({
         tags: [
             {
                 hosts: ['example.com', 'www.example.com'],

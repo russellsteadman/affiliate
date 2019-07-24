@@ -20,7 +20,7 @@ Or use a CDN
 
 ```js
 const Affiliate = require('affiliate'); // window.Affiliate if using a CDN
-const aff = Affiliate({
+const aff = Affiliate.create({
     log: true, // enable logging
     tags: [
         {
@@ -76,21 +76,20 @@ This exposes an instance of the [`url-parse`](https://www.npmjs.com/package/url-
 ```js
 const Affiliate = require('affiliate');
 
-let newInstance = Affiliate(config); // creates a new Affiliate instance
-let instances = Affiliate.instances(); // returns an array of all instances
+let newInstance = Affiliate.create(config); // creates a new Affiliate instance
+let instances = Affiliate.instances; // an array of all instances
 Affiliate.detachAll(); // stops all instances from making automatic changes
 Affiliate.revert(); // detaches all instances and reverts all urls
 
 newInstance.attach(); // begins listening to DOM events
 newInstance.detach(); // stops listening to DOM events
-newInstance.observer // the MutationObserver used by the instance
 ```
 
 ## Example
 
 ```js
 const Affiliate = require('affiliate'); // window.Affiliate if using a CDN
-let aff = Affiliate({
+let aff = Affiliate.create({
     log: false,
     tags: [
         {
@@ -119,7 +118,7 @@ A simplified codeless solution might better suit some blogging-style sites.
 
 Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
 ```html
-<!-- Replace 2.0 with your intended version -->
+<!-- Replace 3.0 with your intended version -->
 <script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js" async id="aff-js"></script>
 ```
 
@@ -132,16 +131,6 @@ amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com
 ## Plugins
 
 Plugins make some more complex affiliation tasks super simple. Check out a list [here](https://affiliate.js.org/plugins), and [learn to make your own](https://affiliate.js.org/plugins).
-
-## Testing
-
-Affiliate is tested using Jasmine. The test of the minified packages is available [here](/test/index.html) and the webpack package [here](/test/webpack.html).
-
-### Big Thanks
-
-[![Sauce Labs](https://affiliate.js.org/test/sauce/saucelabs.png)](https://saucelabs.com/)
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com/)!
 
 ## Left with Questions?
 
