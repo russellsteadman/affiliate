@@ -2,7 +2,7 @@
   "name": "affiliate",
   "version": "3.0.0",
   "description": "A platform agnostic tool to quickly add affiliate links onto your website",
-  "main": "src/Generator.js",
+  "main": "dist/affiliate.node.js",
   "repository": "https://github.com/teamtofu/affiliate.git",
   "homepage": "https://affiliate.js.org/",
   "author": "Russell Steadman <steadman.21@osu.edu> (https://www.russellsteadman.com/)",
