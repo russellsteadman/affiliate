@@ -1,8 +1,8 @@
 /* Utility function for parsing data-aff syntax */
-const pLimit = (data, delimiter) => {
+const BRK = (data, delimiter) => {
     if (typeof data === 'object') {
         for (let i in data) {
-            data[i] = pLimit(data[i], delimiter);
+            data[i] = BRK(data[i], delimiter);
         }
     } else if (typeof data === 'string') {
         data = data.split(delimiter);
@@ -14,14 +14,14 @@ const pLimit = (data, delimiter) => {
 };
 
 /* Setup automatic configuration */
-const autoConfig = () => {
+const AutoConfig = () => {
     let scriptNode = document.getElementById('aff-js');
 
     if (typeof scriptNode === 'object' && scriptNode !== null) {
         let nodeData = scriptNode.getAttribute('data-aff');
 
         if (typeof nodeData === 'string') {
-            let parsedData = pLimit(pLimit(pLimit(pLimit(nodeData, '!'), ':'), ','), '=');
+            let parsedData = BRK(BRK(BRK(BRK(nodeData, '!'), ':'), ','), '=');
             let tags = [];
 
             for (let i in parsedData) {
@@ -43,4 +43,4 @@ const autoConfig = () => {
     }
 };
 
-module.exports = autoConfig;
+module.exports = AutoConfig;

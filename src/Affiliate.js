@@ -3,46 +3,54 @@ const parseURL = require('url-parse');
 // docile stores data relative to DOM elements
 const Docile = require('docile');
 // log safely implements console.log for older browsers
-const log = require('./log');
+const Log = require('./Log');
 
 // Check for MutationObserver
 const canObserve = !(typeof window.MutationObserver === 'undefined');
 
+/**
+ * @class Manages stateful affiliation
+ */
 class Affiliate {
+    #state = {
+        attached: false,
+        config: {},
+        hosts: []
+    };
+    #observer = null;
+
     constructor(config) {
         // Extend the configuration
         config = {
             tags: [],
             ...config,
         };
-    
-        // Make a list of all matching hosts
-        let hosts = [];
 
         for (let i in config.tags) {
             // Convert a single host to an array
             if (typeof config.tags[i].hosts === 'string') config.tags[i].hosts = [config.tags[i].hosts];
 
             // Extend proper tag configuration
-            config.tags[i] = {...{
+            config.tags[i] = {
                 hosts: [],
                 query: {},
-                replace: []
-            }, ...config.tags[i]};
+                replace: [],
+                ...config.tags[i]
+            };
 
             // Append hosts to full list
-            hosts = hosts.concat(config.tags[i].hosts);
+            this.#state.hosts = this.#state.hosts.concat(config.tags[i].hosts);
         }
     
         // Set logging function
-        this.log = config.log ? log : () => {};
+        this.log = config.log ? Log : () => {};
 
         this.log(false, 'New Instance', config);
 
         // Check is MutationObserver is supported
         if (canObserve) {
             // Initialize MutationObserver
-            this.observer = new window.MutationObserver((mutations) => {
+            this.#observer = new window.MutationObserver((mutations) => {
                 // This function is called for every DOM mutation
 
                 // Has a mutation been logged
@@ -68,20 +76,22 @@ class Affiliate {
                     }
 
                     // Scan the node and subnodes if there are any
-                    this.traverseNodes(mutations[i].target);
+                    this.traverse(mutations[i].target);
                 }
             });
         }
 
         // Set internal state
-        this.state = {
-            attached: false,
-            config,
-            hosts
-        };
+        this.#state.config = config;
     }
 
-    traverseNodes(nodeSet) {
+    /**
+     * Manual function to search the DOM for unaffiliated links
+     * 
+     * @function
+     * @param {object=} nodeSet The node to traverse for links (default: document.body)
+     */
+    traverse(nodeSet) {
         // Default to searching everything
         if (!nodeSet) nodeSet = document.body;
 
@@ -91,7 +101,7 @@ class Affiliate {
         let collection = nodeSet.getElementsByTagName('a');
         let nodes = [];
         for (let i in collection) {
-            if (collection.hasOwnProperty(i)) nodes[i] = collection[i];
+            if (Object.hasOwnProperty.call(collection, i)) nodes[i] = collection[i];
         }
 
         // If the nodeSet is a single link, turn to array
@@ -106,16 +116,25 @@ class Affiliate {
             let url = parseURL(nodes[o].getAttribute('href') || '', true);
 
             // Only modify hosts provided.
-            if (this.state.hosts.indexOf(url.host) === -1) continue;
-            for (let i in this.state.config.tags) {
-                if (this.state.config.tags[i].hosts.indexOf(url.host) >= 0) {
-                    this.modifyURL(url, nodes[o], this.state.config.tags[i]);
+            if (this.#state.hosts.indexOf(url.host) === -1) continue;
+            for (let i in this.#state.config.tags) {
+                if (this.#state.config.tags[i].hosts.indexOf(url.host) !== -1) {
+                    this.#modifyURL(url, nodes[o], this.#state.config.tags[i]);
                 }
             }
         }
     }
 
-    modifyURL(url, node, tag) {
+    /**
+     * Modify the URL of a matching link while preserving the original link state
+     * 
+     * @private
+     * @function
+     * @param {string} url Original url string
+     * @param {object} node Anchor link node
+     * @param {object} tag Matching configuration tag
+     */
+    #modifyURL = (url, node, tag) => {
         // Check if URL is already modified
         let linkData = Docile.get(node) || {};
         if (linkData.is && linkData.is === url.href) return;
@@ -134,7 +153,7 @@ class Affiliate {
                 let returnedURL = tag.modify(url);
                 url = parseURL(returnedURL.href || returnedURL, true);
             } catch (e) {
-                log(true, e);
+                Log(true, e);
             }
         }
 
@@ -150,21 +169,26 @@ class Affiliate {
             was: originalURL,
             is: url
         });
-    }
+    };
 
-    attach() {
+    /**
+     * Attach the mutation observer
+     * 
+     * @function
+     */
+    attach = () => {
         // Cannot attach twice
-        if (this.state.attached) return;
+        if (this.#state.attached) return;
 
         // Get readyState, or the loading state of the DOM
         let { readyState } = document;
 
         if (readyState === 'complete' || readyState === 'interactive' || readyState === 'loaded') {
             // Set attached to true
-            this.state.attached = true;
+            this.#state.attached = true;
 
             // Run through the entire body tag
-            this.traverseNodes();
+            this.traverse();
         } else {
             // Wait until the DOM loads
             return window.addEventListener('DOMContentLoaded', this.attach.bind(this));
@@ -172,7 +196,7 @@ class Affiliate {
 
         if (canObserve) {
             // Attach the observer
-            this.observer.observe(document.body, {
+            this.#observer.observe(document.body, {
                 childList: true,
                 subtree: true,
                 attributes: true,
@@ -182,15 +206,19 @@ class Affiliate {
         } else {
             this.log(false, 'Browser does not support MutationObserver.');
         }
-    }
+    };
 
-    detach() {
-        // Detach the mutation observer
+    /**
+     * Detach the mutation observer
+     * 
+     * @function
+     */
+    detach = () => {
         if (!canObserve) return;
-        this.state.attached = false;
-        this.observer.disconnect();
+        this.#state.attached = false;
+        this.#observer.disconnect();
         this.log(false, 'Observer disconnected.');
-    }
+    };
 }
 
 module.exports = Affiliate;

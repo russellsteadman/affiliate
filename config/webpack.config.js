@@ -2,9 +2,9 @@
 const path = require('path');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './../src/Generator.js',
   output: {
-    path: path.resolve(__dirname, 'dist'), 
+    path: path.resolve(__dirname, '../dist'), 
     filename: 'affiliate.js',
     library: 'Affiliate',
     libraryTarget: 'window'
@@ -18,16 +18,7 @@ module.exports = {
             use: {
                 loader: 'babel-loader',
                 options: {
-                    presets: [
-                      ['@babel/preset-env', {
-                        'targets': {
-                          'browsers': ['last 4 versions', 'safari >= 7', 'ie >= 9']
-                        }
-                      }]
-                    ],
-                    plugins: [
-                      require('babel-plugin-transform-object-rest-spread')
-                    ]
+                  rootMode: 'upward'
                 }
             }
         }

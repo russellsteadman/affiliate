@@ -1,24 +1,27 @@
 # Affiliate
+
 Affiliate is a platform agnostic link affiliator. Simplify affiliating links with automatic affiliation in the browser. Affiliate works with libraries that mutate the DOM after the page loads, including React.
 
 [![&#x1f31f; Star me on Github](https://badgen.net/github/stars/teamtofu/affiliate)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://badgen.net/npm/dt/affiliate)](https://www.npmjs.com/package/affiliate) [![Use via CDN](https://badgen.net/jsdelivr/hits/npm/affiliate)](https://www.jsdelivr.com/package/npm/affiliate) [![Bundle small when minified](https://badgen.net/bundlephobia/min/affiliate)](https://bundlephobia.com/result?p=affiliate) [![Bundle small when minified and gunzipped](https://badgen.net/bundlephobia/minzip/affiliate)](https://bundlephobia.com/result?p=affiliate)
 
 ## Installation
 
+Use NPM or Yarn
 ```bash
 $ npm install --save affiliate
 $ yarn add affiliate
 ```
 
-Or use a CDN
+Or use a CDN ([check out the codeless setup](#blogs-and-related-sites))
 ```html
-<!-- Replace 2.0.3 with your intended version -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@2.0.3/dist/affiliate.js"></script>
+<!-- Replace 3.0.0 with your intended version -->
+<script src="https://cdn.jsdelivr.net/npm/affiliate@3.0.0/dist/affiliate.js"></script>
 ```
 
 ## What It Can Do
 
-Affiliate can modify the following link into any of the others.
+Affiliate can modify query tags (e.g. setting `?tag=my-tag`, which is the most common method for affiliate tags), modify URL paths, and modify host names.
+
 ```html
 <a href="https://example.com/shop/product/item-id">Original</a>
 ```
@@ -33,11 +36,11 @@ Affiliate has easy [plugins](https://affiliate.js.org/plugins), including one fo
 
 ## Basic Setup
 
-Read [the documentation](https://affiliate.js.org/) for more advanced usage.
+Read **[the documentation](https://affiliate.js.org/)** for more advanced usage.
 
 ```js
 const Affiliate = require('affiliate');
-const aff = Affiliate({
+const aff = Affiliate.create({
     tags: [
         {
             hosts: ['example.com', 'www.example.com'],
@@ -58,33 +61,25 @@ aff.attach();
 
 ## Documentation
 
-Affiliate is simple and quick to set up, even for more complex usage. Read the docs at: [affiliate.js.org](https://affiliate.js.org/).
+Affiliate is simple and quick to set up, even for more complex usage. Read the docs at: **[affiliate.js.org](https://affiliate.js.org/)**.
 
 ### Blogs and Related Sites
 
 A simplified codeless solution might better suit some blogging-style sites.
 
-Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
+Insert this code within the HTML `<head>...</head>` tag. The contents of the `data-aff` attribute will tell Affiliate what to do.
+
 ```html
 <!-- Replace 2.0 with your intended version -->
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@2.0/dist/affiliate.js" async id="aff-js"></script>
+<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js" async id="aff-js"></script>
 ```
 
 #### data-aff Syntax
+
 The syntax for data-aff is a comma separated list of domains, a colon, and then comma separated list of url queries in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
 ```
 amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com : ref = MY-OTHER-TAG
 ```
-
-## Testing
-
-Affiliate is tested using Jasmine. The test for the minified package is available [here](https://affiliate.js.org/test/index.html) and an example webpack package [here](https://affiliate.js.org/test/webpack.html).
-
-### Big Thanks
-
-[![Sauce Labs](https://affiliate.js.org/test/sauce/saucelabs.png)](https://saucelabs.com/)
-
-Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com/)!
 
 ## Left with Questions?
 

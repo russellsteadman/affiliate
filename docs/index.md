@@ -12,8 +12,8 @@ $ yarn add affiliate
 
 Or use a CDN
 ```html
-<!-- Replace 2.0.3 with your intended version -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@2.0.3/dist/affiliate.js"></script>
+<!-- Replace 3.0.0 with your intended version -->
+<script src="https://cdn.jsdelivr.net/npm/affiliate@3.0.0/dist/affiliate.js"></script>
 ```
 
 ## Configuration
@@ -120,7 +120,7 @@ A simplified codeless solution might better suit some blogging-style sites.
 Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
 ```html
 <!-- Replace 2.0 with your intended version -->
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@2.0/dist/affiliate.js" async id="aff-js"></script>
+<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js" async id="aff-js"></script>
 ```
 
 #### data-aff Syntax

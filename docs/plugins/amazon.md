@@ -14,8 +14,8 @@ $ yarn add affiliate affiliate-plugin-amazon
 
 Or use a CDN
 ```html
-<!-- Replace 2.0.3 and 2.0.0 with your intended versions -->
-<script src="https://cdn.jsdelivr.net/combine/npm/affiliate@2.0.3/dist/affiliate.js,npm/affiliate-plugin-amazon@2.0.0/dist/plugin.js"></script>
+<!-- Replace 3.0 and 3.0 with your intended versions -->
+<script src="https://cdn.jsdelivr.net/combine/npm/affiliate@3.0/dist/affiliate.js,npm/affiliate-plugin-amazon@3.0/dist/plugin.js"></script>
 ```
 
 ## What It Can Do
