@@ -71,7 +71,7 @@ class Affiliate {
 
                     // Only calls on first mutation
                     if (!emitted) {
-                        this.log(false, 'DOM Mutation');
+                        this.log(false, 'DOM Mutation', mutations[i]);
                         emitted = true;
                     }
 
@@ -94,6 +94,8 @@ class Affiliate {
     traverse(nodeSet) {
         // Default to searching everything
         if (!nodeSet) nodeSet = document.body;
+
+        if (typeof nodeSet !== 'object' || typeof nodeSet.getElementsByTagName !== 'function') return;
 
         this.log(false, 'Traversing DOM...');
 
@@ -189,22 +191,22 @@ class Affiliate {
 
             // Run through the entire body tag
             this.traverse();
+
+            if (canObserve) {
+                // Attach the observer
+                this.#observer.observe(document.body, {
+                    childList: true,
+                    subtree: true,
+                    attributes: true,
+                    characterData: true,
+                    attributeFilter: ['href']
+                });
+            } else {
+                this.log(false, 'Browser does not support MutationObserver.');
+            }
         } else {
             // Wait until the DOM loads
-            return window.addEventListener('DOMContentLoaded', this.attach.bind(this));
-        }
-
-        if (canObserve) {
-            // Attach the observer
-            this.#observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                characterData: true,
-                attributeFilter: ['href']
-            });
-        } else {
-            this.log(false, 'Browser does not support MutationObserver.');
+            return window.addEventListener('DOMContentLoaded', this.attach);
         }
     };
 

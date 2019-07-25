@@ -25,13 +25,19 @@ try {
         var npm = user_agent.splice(0, 2);
         user_agent = [npm[0] + '/' + npm[1]].concat(user_agent);
     }
+
+    var isUninstall = process.env.npm_lifecycle_event === 'preuninstall';
+
+    if (isUninstall) {
+      console.log('\nUninstalling affiliate? Tell us why: https://forms.gle/bEvXnp4V16wkA98t5\n');
+    }
   
     var params = {
       v:   1,
       tid: 'UA-72546719-16',
       aip: 1,
       t:   'event',
-      ec:  process.env.npm_lifecycle_event === 'preuninstall' ? 'uninstall' : 'install',
+      ec:  isUninstall ? 'uninstall' : 'install',
       ea:  process.env.npm_package_name,
       el:  process.env.npm_package_version,
       ua:  'install-stats-1.0.6',
