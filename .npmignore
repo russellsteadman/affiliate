@@ -9,3 +9,4 @@ webpack.config.node.js
 docs/
 PULL_REQUEST_TEMPLATE
 .eslintrc.js
+tests/
