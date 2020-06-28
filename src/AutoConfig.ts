@@ -1,13 +1,15 @@
+type BreakUpData = string | Array<BreakUpData>;
+
 /* Utility function for parsing data-aff syntax */
-const BRK = (data, delimiter) => {
+const breakUp: (data: BreakUpData, delimiter: string) => BreakUpData = (data: BreakUpData | string, delimiter: string) => {
     if (typeof data === 'object') {
         for (let i in data) {
-            data[i] = BRK(data[i], delimiter);
+            data[i] = breakUp(data[i], delimiter);
         }
     } else if (typeof data === 'string') {
         data = data.split(delimiter);
         for (let o in data) {
-            data[o] = data[o].trim();
+            data[o] = (<string>data[o]).trim();
         }
     }
     return data;
@@ -18,14 +20,17 @@ const AutoConfig = () => {
     let scriptNode = document.getElementById('aff-js');
 
     if (typeof scriptNode === 'object' && scriptNode !== null) {
-        let nodeData = scriptNode.getAttribute('data-aff');
+        let nodeData = scriptNode.dataset.aff;
 
         if (typeof nodeData === 'string') {
-            let parsedData = BRK(BRK(BRK(BRK(nodeData, '!'), ':'), ','), '=');
+            let parsedData = <string[][][][]>breakUp(breakUp(breakUp(breakUp(nodeData, '!'), ':'), ','), '=');
             let tags = [];
 
             for (let i in parsedData) {
-                let tag = {
+                let tag: {
+                    hosts: string[],
+                    query: { [key: string]: string }
+                } = {
                     hosts: [],
                     query: {}
                 };
@@ -43,4 +48,4 @@ const AutoConfig = () => {
     }
 };
 
-module.exports = AutoConfig;
+export default AutoConfig;

@@ -1,19 +1,17 @@
-// Docile stores data relative to DOM elements
-const Docile = require('docile');
-// AutoConfig stores data relative to DOM elements
-const AutoConfig = require('./AutoConfig');
-// Affiliate is the main class for affiliate instances
-const Affiliate = require('./Affiliate');
-// Log safely implements console.log for older browsers
-const Log = require('./Log');
+import Docile from 'docile/src/docile';
+import AutoConfig from './AutoConfig';
+import Affiliate, { AffiliateConfig } from './Affiliate';
+import Log from './Log';
 
 /**
  * @class Set up the global Affiliate export
  */
 class Generator {
-    #state = {
+    #state: {
+        instances: Affiliate[],
+        auto?: Affiliate
+    } = {
         instances: [],
-        auto: null,
     };
 
     constructor() {
@@ -37,7 +35,7 @@ class Generator {
      * @param {object} config Configuration options for Affiliate
      * @returns {object} Affiliate instance
      */
-    create = (config) => {
+    create = (config: Partial<AffiliateConfig>) => {
         let Instance = new Affiliate(config);
         this.#state.instances.push(Instance);
         return Instance;
@@ -49,7 +47,7 @@ class Generator {
      * @type {Array.<object>}
      */
     get instances() {
-        return [].concat(this.#state.instances);
+        return [...this.#state.instances];
     }
 
     /**
@@ -70,15 +68,15 @@ class Generator {
      */
     revert = () => {
         this.detachAll();
-        let nodes = [].slice.call(document.body.getElementsByTagName('a'));
+        let nodes = <HTMLAnchorElement[]>[].slice.call(document.body.getElementsByTagName('a'));
         for (let i in nodes) {
             let linkData = Docile.get(nodes[i]);
             if (linkData && linkData.was) {
-                nodes[i].setAttribute('href', linkData.was);
+                nodes[i].href = linkData.was;
                 Docile.set(nodes[i], {});
             }
         }
     };
 }
 
-module.exports = new Generator();
+export default new Generator();
