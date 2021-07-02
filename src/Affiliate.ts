@@ -1,9 +1,11 @@
-import URLParse from "url-parse";
-import Docile from "docile/src/docile";
-import Log from "./Log";
+import URLParse from 'url-parse';
+import Docile from 'docile/src/docile';
+import Log from './Log';
 
 // Check for MutationObserver
-const canObserve = !(typeof window.MutationObserver === "undefined");
+const canObserve =
+  typeof window === 'object' &&
+  !(typeof window.MutationObserver === 'undefined');
 
 export interface AffiliateConfigTag {
   hosts: string | string[];
@@ -47,7 +49,7 @@ class Affiliate {
       if (!config || !config.tags) return;
 
       // Convert a single host to an array
-      if (typeof tag.hosts === "string") tag.hosts = [tag.hosts];
+      if (typeof tag.hosts === 'string') tag.hosts = [tag.hosts];
 
       // Extend proper tag configuration
       config.tags[i] = {
@@ -66,7 +68,7 @@ class Affiliate {
     // Set logging function
     this.log = config.log ? Log : () => {};
 
-    this.log(false, "New Instance", config);
+    this.log(false, 'New Instance', config);
 
     // Check is MutationObserver is supported
     if (canObserve) {
@@ -79,9 +81,9 @@ class Affiliate {
 
         for (let i in mutations) {
           // If the attributes of the link have been modified
-          if (mutations[i].type === "attributes") {
+          if (mutations[i].type === 'attributes') {
             // Skip links without an href
-            if (mutations[i].attributeName !== "href") continue;
+            if (mutations[i].attributeName !== 'href') continue;
 
             let href = (<HTMLAnchorElement>mutations[i].target).href;
             let linkData = Docile.get(<HTMLElement>mutations[i].target) || {};
@@ -92,7 +94,7 @@ class Affiliate {
 
           // Only calls on first mutation
           if (!emitted) {
-            this.log(false, "DOM Mutation", mutations[i]);
+            this.log(false, 'DOM Mutation', mutations[i]);
             emitted = true;
           }
 
@@ -114,27 +116,27 @@ class Affiliate {
    */
   traverse(nodeSet: HTMLElement = document.body) {
     if (
-      typeof nodeSet !== "object" ||
-      typeof nodeSet.getElementsByTagName !== "function"
+      typeof nodeSet !== 'object' ||
+      typeof nodeSet.getElementsByTagName !== 'function'
     )
       return;
 
-    this.log(false, "Traversing DOM...");
+    this.log(false, 'Traversing DOM...');
 
     // Reduce link collection to array
-    let collection = nodeSet.getElementsByTagName("a");
+    let collection = nodeSet.getElementsByTagName('a');
     let nodes = <HTMLElement[]>Object.values(collection);
 
     // If the nodeSet is a single link, turn to array
-    if (nodeSet.nodeName.toLowerCase() === "a") nodes = [nodeSet];
+    if (nodeSet.nodeName.toLowerCase() === 'a') nodes = [nodeSet];
 
     // Go through each link
     for (let o in nodes) {
       // Check if it is actually linking
-      if (!nodes[o] || "href" in nodes[o]) continue;
+      if (!nodes[o] || 'href' in nodes[o]) continue;
 
       // Parse the URL via url-parse
-      let url = URLParse((<HTMLAnchorElement>nodes[o]).href ?? "", true);
+      let url = URLParse((<HTMLAnchorElement>nodes[o]).href ?? '', true);
 
       // Only modify hosts provided.
       if (this.state.hosts.indexOf(url.host) === -1) continue;
@@ -171,16 +173,16 @@ class Affiliate {
     // Preserve the original URL
     let originalURL = url.href;
 
-    this.log(false, "Discovered URL: " + url.href);
+    this.log(false, 'Discovered URL: ' + url.href);
 
     // Change query variables
-    url.set("query", { ...url.query, ...tag.query });
+    url.set('query', { ...url.query, ...tag.query });
 
     // Run the modification function
-    if (typeof tag.modify === "function") {
+    if (typeof tag.modify === 'function') {
       try {
         let returnedURL = tag.modify(url);
-        if (typeof returnedURL === "object") returnedURL = returnedURL.href;
+        if (typeof returnedURL === 'object') returnedURL = returnedURL.href;
         url = URLParse(returnedURL, true);
       } catch (e) {
         Log(true, e);
@@ -207,13 +209,13 @@ class Affiliate {
    * @function
    */
   attach: () => void = () => {
-    // Cannot attach twice
-    if (this.state.attached) return;
+    // Cannot attach twice, cannot attach for node
+    if (this.state.attached || typeof document === 'undefined') return;
 
     // Get readyState, or the loading state of the DOM
     let { readyState } = document;
 
-    if (readyState === "complete" || readyState === "interactive") {
+    if (readyState === 'complete' || readyState === 'interactive') {
       // Set attached to true
       this.state.attached = true;
 
@@ -227,14 +229,14 @@ class Affiliate {
           subtree: true,
           attributes: true,
           characterData: true,
-          attributeFilter: ["href"],
+          attributeFilter: ['href'],
         });
       } else {
-        this.log(false, "Browser does not support MutationObserver.");
+        this.log(false, 'Browser does not support MutationObserver.');
       }
     } else {
       // Wait until the DOM loads
-      return window.addEventListener("DOMContentLoaded", this.attach);
+      return window.addEventListener('DOMContentLoaded', this.attach);
     }
   };
 
@@ -247,7 +249,7 @@ class Affiliate {
     if (!canObserve || !this.observer) return;
     this.state.attached = false;
     this.observer.disconnect();
-    this.log(false, "Observer disconnected.");
+    this.log(false, 'Observer disconnected.');
   };
 }
 

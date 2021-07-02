@@ -1,7 +1,8 @@
 # Affiliate
+
 Affiliate is a platform agnostic link affiliator. Simplify affiliating links with automatic affiliation in the browser. Affiliate works with libraries that mutate the DOM after the page loads, including React.
 
-[![&#x1f31f; Star me on Github](https://badgen.net/github/stars/teamtofu/affiliate)](https://github.com/teamtofu/affiliate) [![Download via NPM](https://badgen.net/npm/dt/affiliate)](https://www.npmjs.com/package/affiliate) [![Use via CDN](https://badgen.net/jsdelivr/hits/npm/affiliate)](https://www.jsdelivr.com/package/npm/affiliate) [![Bundle small when minified](https://badgen.net/bundlephobia/min/affiliate)](https://bundlephobia.com/result?p=affiliate) [![Bundle small when minified and gunzipped](https://badgen.net/bundlephobia/minzip/affiliate)](https://bundlephobia.com/result?p=affiliate)
+[![🌟 Star me on Github](https://badgen.net/github/stars/russellsteadman/affiliate)](https://github.com/russellsteadman/affiliate) [![Download via NPM](https://badgen.net/npm/dt/affiliate)](https://www.npmjs.com/package/affiliate) [![Use via CDN](https://badgen.net/jsdelivr/hits/npm/affiliate)](https://www.jsdelivr.com/package/npm/affiliate) [![Bundle small when minified](https://badgen.net/bundlephobia/min/affiliate)](https://bundlephobia.com/result?p=affiliate) [![Bundle small when minified and gunzipped](https://badgen.net/bundlephobia/minzip/affiliate)](https://bundlephobia.com/result?p=affiliate)
 
 ## Installation
 
@@ -11,6 +12,7 @@ $ yarn add affiliate
 ```
 
 Or use a CDN
+
 ```html
 <!-- Replace 3.0.0 with your intended version -->
 <script src="https://cdn.jsdelivr.net/npm/affiliate@3.0.0/dist/affiliate.js"></script>
@@ -21,30 +23,31 @@ Or use a CDN
 ```js
 const Affiliate = require('affiliate'); // window.Affiliate if using a CDN
 const aff = Affiliate.create({
-    log: true, // enable logging
-    tags: [
+  log: true, // enable logging
+  tags: [
+    {
+      hosts: ['example.com', 'www.example.com'], // a list of applicable hosts
+      query: {
+        ref: 'my-tag', // will output a url with ?ref=my-tag
+      },
+      replace: [
         {
-            hosts: ['example.com', 'www.example.com'], // a list of applicable hosts
-            query: {
-                ref: 'my-tag' // will output a url with ?ref=my-tag
-            },
-            replace: [
-                {
-                    from: 'ref-tag', // will replace ref-tag in all urls with my tag
-                    to: 'my-tag'
-                },
-                {
-                    from: /ref-regex/g, // regular expressions are supported
-                    to: 'my-tag'
-                }
-            ],
-            modify: function (url) { // a function that directly modifies the URL
-                url.set('pathname', url.pathname + '-tag');
-                url.set('hostname', url.hostname + '.rdr.example.com');
-                return url;
-            }
-        }
-    ]
+          from: 'ref-tag', // will replace ref-tag in all urls with my tag
+          to: 'my-tag',
+        },
+        {
+          from: /ref-regex/g, // regular expressions are supported
+          to: 'my-tag',
+        },
+      ],
+      modify: function (url) {
+        // a function that directly modifies the URL
+        url.set('pathname', url.pathname + '-tag');
+        url.set('hostname', url.hostname + '.rdr.example.com');
+        return url;
+      },
+    },
+  ],
 });
 aff.attach();
 ```
@@ -90,26 +93,31 @@ newInstance.detach(); // stops listening to DOM events
 ```js
 const Affiliate = require('affiliate'); // window.Affiliate if using a CDN
 let aff = Affiliate.create({
-    log: false,
-    tags: [
-        {
-            hosts: ['amazon.com', 'www.amazon.com'],
-            query: {
-                ref: 'my-amazon-tag-20'
-            }
-        }
-    ]
+  log: false,
+  tags: [
+    {
+      hosts: ['amazon.com', 'www.amazon.com'],
+      query: {
+        ref: 'my-amazon-tag-20',
+      },
+    },
+  ],
 });
 aff.attach();
 ```
 
 ```html
-You should try the <a href="https://www.amazon.com/dp/B00ADG744Q">Chocolate Passport</a>.
+You should try the
+<a href="https://www.amazon.com/dp/B00ADG744Q">Chocolate Passport</a>.
 ```
 
 Will become...
+
 ```html
-You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-tag-20">Chocolate Passport</a>.
+You should try the
+<a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-tag-20"
+  >Chocolate Passport</a
+>.
 ```
 
 ### Blogs and Related Sites
@@ -117,13 +125,21 @@ You should try the <a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-t
 A simplified codeless solution might better suit some blogging-style sites.
 
 Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
+
 ```html
 <!-- Replace 3.0 with your intended version -->
-<script data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG" src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js" async id="aff-js"></script>
+<script
+  data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG"
+  src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js"
+  async
+  id="aff-js"
+></script>
 ```
 
 #### data-aff Syntax
+
 The syntax for data-aff is a comma separated list of domains, a colon, and then comma separated list of url queries in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
+
 ```
 amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com : ref = MY-OTHER-TAG
 ```
@@ -134,12 +150,12 @@ Plugins make some more complex affiliation tasks super simple. Check out a list 
 
 ## Left with Questions?
 
-If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/teamtofu/affiliate/issues/new) detailing what needs to be improved. It will be addressed quickly.
+If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/russellsteadman/affiliate/issues/new) detailing what needs to be improved. It will be addressed quickly.
 
 ## Star This Project
 
-Like this project? Let me know by [putting a star on it](https://github.com/teamtofu/affiliate). &#x1f609;&#x1f31f;
+Like this project? Let me know by [putting a star on it](https://github.com/russellsteadman/affiliate). &#x1f609;&#x1f31f;
 
 ## License
 
-MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=index_copy). Learn more in the [LICENSE](https://github.com/teamtofu/affiliate/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=index_copy). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate/blob/master/LICENSE) file.
