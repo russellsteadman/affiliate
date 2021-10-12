@@ -1,7 +1,7 @@
-import Docile from "docile/src/docile";
-import AutoConfig from "./AutoConfig";
-import Affiliate, { AffiliateConfig } from "./Affiliate";
-import Log from "./Log";
+import AutoConfig from './shared/autoConfig';
+import Affiliate, { AffiliateConfig } from './Affiliate';
+import Log from './shared/log';
+import { getNodeData, setNodeData } from './shared/nodeTools';
 
 /**
  * @class Set up the global Affiliate export
@@ -17,7 +17,7 @@ class Generator {
   constructor() {
     try {
       let config = AutoConfig();
-      if (typeof config === "object") {
+      if (typeof config === 'object') {
         let auto = this.create(config);
         Log(false, auto);
         this.state.auto = auto;
@@ -69,13 +69,13 @@ class Generator {
   revert = () => {
     this.detachAll();
     let nodes = <HTMLAnchorElement[]>(
-      [].slice.call(document.body.getElementsByTagName("a"))
+      [].slice.call(document.body.getElementsByTagName('a'))
     );
     for (let i in nodes) {
-      let linkData = Docile.get(nodes[i]);
+      let linkData = getNodeData(nodes[i]);
       if (linkData && linkData.was) {
         nodes[i].href = linkData.was;
-        Docile.set(nodes[i], {});
+        setNodeData(nodes[i], {});
       }
     }
   };

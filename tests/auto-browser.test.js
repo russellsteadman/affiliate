@@ -9,12 +9,17 @@ const path = require('path');
 let Affiliate = '';
 
 beforeAll(async () => {
-    await new Promise((res, rej) => webpack(require('../config/webpack.config'), (err, stats) => {
-        if (err || stats.hasErrors()) rej(new Error('Could not compile Affiliate'));
+  await new Promise((res, rej) =>
+    webpack(require('../config/webpack.config'), (err, stats) => {
+      if (err || stats.hasErrors())
+        rej(new Error('Could not compile Affiliate'));
 
-        Affiliate = fs.readFileSync(path.join(__dirname, '../dist/affiliate.js')).toString('utf8');
-        res();
-    }));
+      Affiliate = fs
+        .readFileSync(path.join(__dirname, '../dist/web/affiliate.web.js'))
+        .toString('utf8');
+      res();
+    }),
+  );
 }, 10000);
 
 const LANDING_PAGE = 'https://example.com/';
@@ -81,29 +86,35 @@ window.createLink = function (href) {
 };
 `;
 
-test("Generator has correct types", async () => {
-    await page.goto(LANDING_PAGE);
-    await page.addScriptTag({content: Affiliate});
-    expect(await page.evaluate(`typeof window.Affiliate`)).toBe('object');
-    expect(await page.evaluate(`typeof window.Affiliate.instances`)).toBe('object');
-    expect(await page.evaluate(`typeof window.Affiliate.detachAll`)).toBe('function');
-    expect(await page.evaluate(`typeof window.Affiliate.revert`)).toBe('function');
+test('Generator has correct types', async () => {
+  await page.goto(LANDING_PAGE);
+  await page.addScriptTag({ content: Affiliate });
+  expect(await page.evaluate(`typeof window.Affiliate`)).toBe('object');
+  expect(await page.evaluate(`typeof window.Affiliate.instances`)).toBe(
+    'object',
+  );
+  expect(await page.evaluate(`typeof window.Affiliate.detachAll`)).toBe(
+    'function',
+  );
+  expect(await page.evaluate(`typeof window.Affiliate.revert`)).toBe(
+    'function',
+  );
 });
 
-test("Instance has correct types", async () => {
-    await page.goto(LANDING_PAGE);
-    await page.addScriptTag({content: Affiliate});
-    await page.evaluate(UTILITIES);
+test('Instance has correct types', async () => {
+  await page.goto(LANDING_PAGE);
+  await page.addScriptTag({ content: Affiliate });
+  await page.evaluate(UTILITIES);
 
-    await page.evaluate(`let aff = Affiliate.create(optionOne);`);
+  await page.evaluate(`let aff = Affiliate.create(optionOne);`);
 
-    expect(await page.evaluate(`typeof aff.attach`)).toBe('function');
-    expect(await page.evaluate(`typeof aff.detach`)).toBe('function');
+  expect(await page.evaluate(`typeof aff.attach`)).toBe('function');
+  expect(await page.evaluate(`typeof aff.detach`)).toBe('function');
 
-    await page.evaluate(`delete window.Affiliate`);
-    await page.addScriptTag({content: Affiliate});
+  await page.evaluate(`delete window.Affiliate`);
+  await page.addScriptTag({ content: Affiliate });
 
-    await page.evaluate(`
+  await page.evaluate(`
         aff = Affiliate.create(optionOne);
         aff.attach();
         aff.detach();
@@ -111,12 +122,12 @@ test("Instance has correct types", async () => {
     `);
 });
 
-test("Instance can mutate links", async () => {
-    await page.goto(LANDING_PAGE);
-    await page.addScriptTag({content: Affiliate});
-    await page.evaluate(UTILITIES);
+test('Instance can mutate links', async () => {
+  await page.goto(LANDING_PAGE);
+  await page.addScriptTag({ content: Affiliate });
+  await page.evaluate(UTILITIES);
 
-    await page.evaluate(`
+  await page.evaluate(`
         let link = createLink('https://www.example.com/ref-regex/');
         let linkTwo = createLink('https://example.org/ref-regex/');
         let linkThree = createLink('https://www.example.com/ref-regex/?ab=c#fun');
@@ -124,16 +135,28 @@ test("Instance can mutate links", async () => {
         aff.attach();
     `);
 
-    expect(await page.evaluate(`link.getAttribute('href')`)).toBe('https://tst.www.example.com/my-tag/-tag?ref=my-tag');
-    expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe('https://example.org/ref-regex/');
-    expect(await page.evaluate(`linkThree.getAttribute('href')`)).toBe('https://tst.www.example.com/my-tag/-tag?ab=c&ref=my-tag#fun');
+  expect(await page.evaluate(`link.getAttribute('href')`)).toBe(
+    'https://tst.www.example.com/my-tag/-tag?ref=my-tag',
+  );
+  expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe(
+    'https://example.org/ref-regex/',
+  );
+  expect(await page.evaluate(`linkThree.getAttribute('href')`)).toBe(
+    'https://tst.www.example.com/my-tag/-tag?ab=c&ref=my-tag#fun',
+  );
 
-    await page.evaluate(`Affiliate.revert()`);
-    expect(await page.evaluate(`link.getAttribute('href')`)).toBe('https://www.example.com/ref-regex/');
-    expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe('https://example.org/ref-regex/');
-    expect(await page.evaluate(`linkThree.getAttribute('href')`)).toBe('https://www.example.com/ref-regex/?ab=c#fun');
+  await page.evaluate(`Affiliate.revert()`);
+  expect(await page.evaluate(`link.getAttribute('href')`)).toBe(
+    'https://www.example.com/ref-regex/',
+  );
+  expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe(
+    'https://example.org/ref-regex/',
+  );
+  expect(await page.evaluate(`linkThree.getAttribute('href')`)).toBe(
+    'https://www.example.com/ref-regex/?ab=c#fun',
+  );
 
-    await page.evaluate(`
+  await page.evaluate(`
         link = createLink('https://example.com/ref-regex/');
         linkTwo = createLink('https://shop.example.org/ref-regex/');
         aff = Affiliate.create(optionTwo);
@@ -141,39 +164,62 @@ test("Instance can mutate links", async () => {
         linkThree = createLink('https://shop.example.org/ref-regex/');
     `);
 
-    expect(await page.evaluate(`link.getAttribute('href')`)).toBe('https://example.com/ref-regex/');
-    expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe('https://tst2.shop.example.org/my-tag2/-tag2?tag=my-tag2');
-    expect(await page.evaluate(`linkThree.getAttribute('href')`)).toBe('https://tst2.shop.example.org/my-tag2/-tag2?tag=my-tag2');
+  expect(await page.evaluate(`link.getAttribute('href')`)).toBe(
+    'https://example.com/ref-regex/',
+  );
+  expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe(
+    'https://tst2.shop.example.org/my-tag2/-tag2?tag=my-tag2',
+  );
+  expect(await page.evaluate(`linkThree.getAttribute('href')`)).toBe(
+    'https://tst2.shop.example.org/my-tag2/-tag2?tag=my-tag2',
+  );
 
-    await page.evaluate(`Affiliate.revert()`);
-    expect(await page.evaluate(`link.getAttribute('href')`)).toBe('https://example.com/ref-regex/');
-    expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe('https://shop.example.org/ref-regex/');
+  await page.evaluate(`Affiliate.revert()`);
+  expect(await page.evaluate(`link.getAttribute('href')`)).toBe(
+    'https://example.com/ref-regex/',
+  );
+  expect(await page.evaluate(`linkTwo.getAttribute('href')`)).toBe(
+    'https://shop.example.org/ref-regex/',
+  );
 });
 
-test("Instance can use data-aff", async () => {
-    await page.goto(LANDING_PAGE);
-    await page.evaluate(UTILITIES);
+test('Instance can use data-aff', async () => {
+  await page.goto(LANDING_PAGE);
+  await page.evaluate(UTILITIES);
 
-    await page.evaluate(`
+  await page.evaluate(`
         window.link = createLink('https://amazon.com/ref-regex/');
         window.linkTwo = createLink('https://www.amazon.com/ref-regex/?ab=c');
         window.linkThree = createLink('https://other.amazon.com/ref-regex/'); 
     `);
 
-    let document = await page.evaluateHandle('document');
+  let document = await page.evaluateHandle('document');
 
-    await page.evaluate((document, Affiliate) => {
-        var script = document.createElement('script');
-        script.setAttribute('data-aff', 'amazon.com, www.amazon.com : tag = my-amz-tag');
-        script.setAttribute('id', 'aff-js');
-        script.setAttribute('async', '');
-        script.innerHTML = Affiliate;
-        document.head.appendChild(script);
-    }, document, Affiliate);
+  await page.evaluate(
+    (document, Affiliate) => {
+      var script = document.createElement('script');
+      script.setAttribute(
+        'data-aff',
+        'amazon.com, www.amazon.com : tag = my-amz-tag',
+      );
+      script.setAttribute('id', 'aff-js');
+      script.setAttribute('async', '');
+      script.innerHTML = Affiliate;
+      document.head.appendChild(script);
+    },
+    document,
+    Affiliate,
+  );
 
-    document.dispose();
+  document.dispose();
 
-    expect(await page.evaluate(`window.link.getAttribute('href')`)).toBe('https://amazon.com/ref-regex/?tag=my-amz-tag');
-    expect(await page.evaluate(`window.linkTwo.getAttribute('href')`)).toBe('https://www.amazon.com/ref-regex/?ab=c&tag=my-amz-tag');
-    expect(await page.evaluate(`window.linkThree.getAttribute('href')`)).toBe('https://other.amazon.com/ref-regex/');
+  expect(await page.evaluate(`window.link.getAttribute('href')`)).toBe(
+    'https://amazon.com/ref-regex/?tag=my-amz-tag',
+  );
+  expect(await page.evaluate(`window.linkTwo.getAttribute('href')`)).toBe(
+    'https://www.amazon.com/ref-regex/?ab=c&tag=my-amz-tag',
+  );
+  expect(await page.evaluate(`window.linkThree.getAttribute('href')`)).toBe(
+    'https://other.amazon.com/ref-regex/',
+  );
 });

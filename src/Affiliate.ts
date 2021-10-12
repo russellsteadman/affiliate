@@ -1,6 +1,6 @@
 import URLParse from 'url-parse';
-import Docile from 'docile/src/docile';
-import Log from './Log';
+import Log from './shared/log';
+import { getNodeData, setNodeData } from './shared/nodeTools';
 
 // Check for MutationObserver
 const canObserve =
@@ -86,7 +86,7 @@ class Affiliate {
             if (mutations[i].attributeName !== 'href') continue;
 
             let href = (<HTMLAnchorElement>mutations[i].target).href;
-            let linkData = Docile.get(<HTMLElement>mutations[i].target) || {};
+            let linkData = getNodeData(mutations[i].target);
 
             // Skip links without a modified href
             if (linkData.is && linkData.is === href) continue;
@@ -130,26 +130,24 @@ class Affiliate {
     // If the nodeSet is a single link, turn to array
     if (nodeSet.nodeName.toLowerCase() === 'a') nodes = [nodeSet];
 
+    this.log(false, `Found ${nodes.length + 1} nodes...`);
+
     // Go through each link
-    for (let o in nodes) {
+    nodes.forEach((node) => {
       // Check if it is actually linking
-      if (!nodes[o] || 'href' in nodes[o]) continue;
+      if (!node || !('href' in node)) return;
 
       // Parse the URL via url-parse
-      let url = URLParse((<HTMLAnchorElement>nodes[o]).href ?? '', true);
+      let url = URLParse((<HTMLAnchorElement>node).href ?? '', true);
 
       // Only modify hosts provided.
-      if (this.state.hosts.indexOf(url.host) === -1) continue;
-      for (let i in this.state.config.tags) {
-        if (this.state.config.tags[i].hosts.indexOf(url.host) !== -1) {
-          this.modifyURL(
-            url,
-            <HTMLAnchorElement>nodes[o],
-            this.state.config.tags[i]
-          );
+      if (this.state.hosts.indexOf(url.host) === -1) return;
+      this.state.config.tags.forEach((tag) => {
+        if (tag.hosts.indexOf(url.host) !== -1) {
+          this.modifyURL(url, <HTMLAnchorElement>node, tag);
         }
-      }
-    }
+      });
+    });
   }
 
   /**
@@ -164,10 +162,10 @@ class Affiliate {
   modifyURL = (
     url: URLParse,
     node: HTMLAnchorElement,
-    tag: AffiliateConfigTag
+    tag: AffiliateConfigTag,
   ) => {
     // Check if URL is already modified
-    let linkData = Docile.get(node) || {};
+    let linkData = getNodeData(node);
     if (linkData.is && linkData.is === url.href) return;
 
     // Preserve the original URL
@@ -197,7 +195,7 @@ class Affiliate {
 
     // Update the href tag and save the url to the DOM node
     node.href = modifiedUrl;
-    Docile.set(node, {
+    setNodeData(node, {
       was: originalURL,
       is: url,
     });
