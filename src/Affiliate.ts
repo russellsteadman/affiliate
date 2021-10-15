@@ -1,11 +1,6 @@
-import URLParse from 'url-parse';
+import { hasMutationObserver, hasURL } from './shared/features';
 import Log from './shared/log';
 import { getNodeData, setNodeData } from './shared/nodeTools';
-
-// Check for MutationObserver
-const canObserve =
-  typeof window === 'object' &&
-  !(typeof window.MutationObserver === 'undefined');
 
 export interface AffiliateConfigTag {
   hosts: string | string[];
@@ -14,7 +9,7 @@ export interface AffiliateConfigTag {
     to: string;
     from: string;
   }[];
-  modify?: (url: URLParse) => URLParse | string;
+  modify?: (url: URL) => URL | string;
 }
 
 export interface AffiliateConfig {
@@ -66,12 +61,12 @@ class Affiliate {
     });
 
     // Set logging function
-    this.log = config.log ? Log : () => {};
+    this.log = config.log ? Log : () => undefined;
 
     this.log(false, 'New Instance', config);
 
     // Check is MutationObserver is supported
-    if (canObserve) {
+    if (hasMutationObserver) {
       // Initialize MutationObserver
       this.observer = new window.MutationObserver((mutations) => {
         // This function is called for every DOM mutation
@@ -79,28 +74,28 @@ class Affiliate {
         // Has a mutation been logged
         let emitted = false;
 
-        for (let i in mutations) {
+        mutations.forEach((mutation) => {
           // If the attributes of the link have been modified
-          if (mutations[i].type === 'attributes') {
+          if (mutation.type === 'attributes') {
             // Skip links without an href
-            if (mutations[i].attributeName !== 'href') continue;
+            if (mutation.attributeName !== 'href') return;
 
-            let href = (<HTMLAnchorElement>mutations[i].target).href;
-            let linkData = getNodeData(mutations[i].target);
+            const href = (<HTMLAnchorElement>mutation.target).href;
+            const linkData = getNodeData(mutation.target);
 
             // Skip links without a modified href
-            if (linkData.is && linkData.is === href) continue;
+            if (linkData.is && linkData.is === href) return;
           }
 
           // Only calls on first mutation
           if (!emitted) {
-            this.log(false, 'DOM Mutation', mutations[i]);
+            this.log(false, 'DOM Mutation', mutation);
             emitted = true;
           }
 
           // Scan the node and subnodes if there are any
-          this.traverse(<HTMLElement>mutations[i].target);
-        }
+          this.traverse(<HTMLElement>mutation.target);
+        });
       });
     }
 
@@ -114,17 +109,22 @@ class Affiliate {
    * @function
    * @param {object=} nodeSet The node to traverse for links (default: document.body)
    */
-  traverse(nodeSet: HTMLElement = document.body) {
+  traverse(nodeSet: HTMLElement = document.body): Affiliate {
     if (
       typeof nodeSet !== 'object' ||
       typeof nodeSet.getElementsByTagName !== 'function'
     )
-      return;
+      return this;
+
+    if (!hasURL) {
+      this.log(true, 'This browser needs a URL polyfill.');
+      return this;
+    }
 
     this.log(false, 'Traversing DOM...');
 
     // Reduce link collection to array
-    let collection = nodeSet.getElementsByTagName('a');
+    const collection = nodeSet.getElementsByTagName('a');
     let nodes = <HTMLElement[]>Object.values(collection);
 
     // If the nodeSet is a single link, turn to array
@@ -137,8 +137,11 @@ class Affiliate {
       // Check if it is actually linking
       if (!node || !('href' in node)) return;
 
-      // Parse the URL via url-parse
-      let url = URLParse((<HTMLAnchorElement>node).href ?? '', true);
+      // Parse the URL natively
+      const url = new URL(
+        (<HTMLAnchorElement>node).href ?? '',
+        window?.location.origin,
+      );
 
       // Only modify hosts provided.
       if (this.state.hosts.indexOf(url.host) === -1) return;
@@ -148,6 +151,8 @@ class Affiliate {
         }
       });
     });
+
+    return this;
   }
 
   /**
@@ -159,31 +164,32 @@ class Affiliate {
    * @param {object} node Anchor link node
    * @param {object} tag Matching configuration tag
    */
-  modifyURL = (
-    url: URLParse,
-    node: HTMLAnchorElement,
-    tag: AffiliateConfigTag,
-  ) => {
+  modifyURL = (url: URL, node: HTMLAnchorElement, tag: AffiliateConfigTag) => {
     // Check if URL is already modified
-    let linkData = getNodeData(node);
+    const linkData = getNodeData(node);
     if (linkData.is && linkData.is === url.href) return;
 
     // Preserve the original URL
-    let originalURL = url.href;
+    const originalURL = url.href;
 
     this.log(false, 'Discovered URL: ' + url.href);
 
     // Change query variables
-    url.set('query', { ...url.query, ...tag.query });
+    if (tag.query) {
+      Object.keys(tag.query ?? {}).forEach((key) => {
+        if (typeof tag.query === 'object')
+          url.searchParams.set(key, tag.query[key]);
+      });
+    }
 
     // Run the modification function
     if (typeof tag.modify === 'function') {
       try {
         let returnedURL = tag.modify(url);
         if (typeof returnedURL === 'object') returnedURL = returnedURL.href;
-        url = URLParse(returnedURL, true);
+        url = new URL(returnedURL, window?.location.origin);
       } catch (e) {
-        Log(true, e);
+        Log(true, e as Error);
       }
     }
 
@@ -197,7 +203,7 @@ class Affiliate {
     node.href = modifiedUrl;
     setNodeData(node, {
       was: originalURL,
-      is: url,
+      is: url.href,
     });
   };
 
@@ -206,12 +212,12 @@ class Affiliate {
    *
    * @function
    */
-  attach: () => void = () => {
+  attach = (): Affiliate => {
     // Cannot attach twice, cannot attach for node
-    if (this.state.attached || typeof document === 'undefined') return;
+    if (this.state.attached || typeof document === 'undefined') return this;
 
     // Get readyState, or the loading state of the DOM
-    let { readyState } = document;
+    const { readyState } = document;
 
     if (readyState === 'complete' || readyState === 'interactive') {
       // Set attached to true
@@ -220,7 +226,7 @@ class Affiliate {
       // Run through the entire body tag
       this.traverse();
 
-      if (canObserve && this.observer) {
+      if (hasMutationObserver && this.observer) {
         // Attach the observer
         this.observer.observe(document.body, {
           childList: true,
@@ -234,8 +240,10 @@ class Affiliate {
       }
     } else {
       // Wait until the DOM loads
-      return window.addEventListener('DOMContentLoaded', this.attach);
+      window.addEventListener('DOMContentLoaded', this.attach);
     }
+
+    return this;
   };
 
   /**
@@ -243,11 +251,12 @@ class Affiliate {
    *
    * @function
    */
-  detach = () => {
-    if (!canObserve || !this.observer) return;
+  detach = (): Affiliate => {
+    if (!hasMutationObserver || !this.observer) return this;
     this.state.attached = false;
     this.observer.disconnect();
     this.log(false, 'Observer disconnected.');
+    return this;
   };
 }
 

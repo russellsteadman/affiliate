@@ -6,22 +6,42 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 
 ## Installation
 
+Use NPM or Yarn
+
 ```bash
 $ npm install --save affiliate
 $ yarn add affiliate
 ```
 
-Or use a CDN
+Or use a CDN ([check out the codeless setup](#blogs-and-related-sites))
 
 ```html
-<!-- Replace 3.0.0 with your intended version -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@3.0.0/dist/affiliate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"></script>
 ```
+
+## What It Can Do
+
+Affiliate can modify query tags (e.g. setting `?tag=my-tag`, which is the most common method for affiliate tags), modify URL paths, and modify host names.
+
+```html
+<a href="https://example.com/shop/product/item-id">Original</a>
+```
+
+```html
+<a href="https://example.com/shop/product/item-id?ref=my-tag">New Query Tags</a>
+<a href="https://example.com/shop/product/item-id/ref/my-tag"
+  >Modified URL Path</a
+>
+<a href="https://my-tag.example.com/shop/product/item-id">Modified Host Name</a>
+```
+
+Affiliate has easy [plugins](https://affiliate.js.org/plugins), including one for [Amazon](https://affiliate.js.org/plugins/amazon), which simplify adding affiliate links even more.
 
 ## Configuration
 
 ```js
-const Affiliate = require('affiliate'); // window.Affiliate if using a CDN
+import Affiliate from 'affiliate'; // window.Affiliate is automatically accessible if using a CDN
+
 const aff = Affiliate.create({
   log: true, // enable logging
   tags: [
@@ -49,35 +69,36 @@ const aff = Affiliate.create({
     },
   ],
 });
+
 aff.attach();
 ```
 
 After passing the configuration to Affiliate, it will search the DOM and automatically and change links. Then whenever the DOM is modified, it will search through the modifications and change those links for no-hassle affiliation.
 
-#### config.log
+### config.log
 
 A boolean of whether or not to enable verbose logging.
 
-#### config.tags[].hosts
+### config.tags[].hosts
 
 An array of the hosts to match.
 
-#### config.tags[].query
+### config.tags[].query
 
 An object to update the query of the url.
 
-#### config.tags[].replace
+### config.tags[].replace
 
 An array of objects with a `from` key that is a regex or string and a `to` key that is the value that will replace the `from` key.
 
-#### config.tags[].modify
+### config.tags[].modify
 
 This exposes an instance of the [`url-parse`](https://www.npmjs.com/package/url-parse#usage) library. This can be used to update individual parts of the URL, such as the hostname or hash. It expects the instance or a URL string to be returned.
 
 ## Affiliate API
 
 ```js
-const Affiliate = require('affiliate');
+import Affiliate from 'affiliate';
 
 let newInstance = Affiliate.create(config); // creates a new Affiliate instance
 let instances = Affiliate.instances; // an array of all instances
@@ -91,8 +112,9 @@ newInstance.detach(); // stops listening to DOM events
 ## Example
 
 ```js
-const Affiliate = require('affiliate'); // window.Affiliate if using a CDN
-let aff = Affiliate.create({
+import Affiliate from 'affiliate'; // window.Affiliate if using a CDN
+
+const aff = Affiliate.create({
   log: false,
   tags: [
     {
@@ -103,6 +125,7 @@ let aff = Affiliate.create({
     },
   ],
 });
+
 aff.attach();
 ```
 
@@ -115,33 +138,33 @@ Will become...
 
 ```html
 You should try the
-<a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-tag-20"
-  >Chocolate Passport</a
->.
+<a href="https://www.amazon.com/dp/B00ADG744Q?ref=my-amazon-tag-20">
+  Chocolate Passport
+</a>
+.
 ```
 
-### Blogs and Related Sites
+## Blogs and Related Sites
 
-A simplified codeless solution might better suit some blogging-style sites.
+A simplified codeless solution might better suit some sites that use content module systems, such as WordPress, SquareSpace, etc.
 
-Insert this code into the page `<head>`. The contents of the `data-aff` attribute will tell Affiliate what to do.
+Insert this code within the HTML `<head>...</head>` tag. The contents of the `data-auto-affiliate` attribute will tell Affiliate what to do.
 
 ```html
-<!-- Replace 3.0 with your intended version -->
 <script
-  data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG"
-  src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js"
+  data-auto-affiliate="WHERE amazon.com, www.amazon.com SET tag = MY-AMAZON-TAG"
+  src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"
   async
   id="aff-js"
 ></script>
 ```
 
-#### data-aff Syntax
+### data-auto-affiliate Syntax
 
-The syntax for data-aff is a comma separated list of domains, a colon, and then comma separated list of url queries in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
+The syntax for data-auto-affiliate is capital `WHERE`, a comma separated list of domains, capital `SET`, and then comma separated list of URL queries in the format `key=value`. Multiple website groups can be separated by a capital `AND`.
 
-```
-amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com : ref = MY-OTHER-TAG
+```sql
+WHERE amazon.com, www.amazon.com SET tag = MY-AMAZON-TAG AND WHERE example.com, shop.example.com SET ref = MY-OTHER-TAG
 ```
 
 ## Plugins
@@ -150,7 +173,7 @@ Plugins make some more complex affiliation tasks super simple. Check out a list 
 
 ## Left with Questions?
 
-If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/russellsteadman/affiliate/issues/new) detailing what needs to be improved. It will be addressed quickly.
+If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/russellsteadman/affiliate/issues/new) detailing what needs to be improved.
 
 ## Star This Project
 
@@ -158,4 +181,4 @@ Like this project? Let me know by [putting a star on it](https://github.com/russ
 
 ## License
 
-MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=index_copy). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=readme_copy). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate/blob/master/LICENSE) file.

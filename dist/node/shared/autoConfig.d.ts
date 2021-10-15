@@ -1,9 +1,7 @@
 declare const AutoConfig: () => {
     tags: {
         hosts: string[];
-        query: {
-            [key: string]: string;
-        };
+        query: Record<string, string>;
     }[];
 } | undefined;
 export default AutoConfig;

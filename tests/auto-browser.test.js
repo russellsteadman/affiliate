@@ -43,8 +43,8 @@ window.optionOne = {
                 }
             ],
             modify: function (url) {
-                url.set('pathname', url.pathname + '-tag');
-                url.set('hostname', 'tst.' + url.hostname);
+                url.pathname = url.pathname + '-tag';
+                url.hostname = 'tst.' + url.hostname;
                 return url;
             }
         }
@@ -70,8 +70,8 @@ window.optionTwo = {
                 }
             ],
             modify: function (url) {
-                url.set('pathname', url.pathname + '-tag2');
-                url.set('hostname', 'tst2.' + url.hostname);
+                url.pathname = url.pathname + '-tag2';
+                url.hostname = 'tst2.' + url.hostname;
                 return url;
             }
         }
@@ -183,7 +183,7 @@ test('Instance can mutate links', async () => {
   );
 });
 
-test('Instance can use data-aff', async () => {
+test('Instance can use data-auto-affiliate', async () => {
   await page.goto(LANDING_PAGE);
   await page.evaluate(UTILITIES);
 
@@ -199,11 +199,11 @@ test('Instance can use data-aff', async () => {
     (document, Affiliate) => {
       var script = document.createElement('script');
       script.setAttribute(
-        'data-aff',
-        'amazon.com, www.amazon.com : tag = my-amz-tag',
+        'data-auto-affiliate',
+        'WHERE amazon.com, www.amazon.com SET tag = my-amz-tag',
       );
       script.setAttribute('id', 'aff-js');
-      script.setAttribute('async', '');
+      // script.setAttribute('async', '');
       script.innerHTML = Affiliate;
       document.head.appendChild(script);
     },

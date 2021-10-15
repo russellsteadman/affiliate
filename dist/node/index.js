@@ -23,7 +23,7 @@ class Generator {
          * @returns {object} Affiliate instance
          */
         this.create = (config) => {
-            let Instance = new Affiliate_1.default(config);
+            const Instance = new Affiliate_1.default(config);
             this.state.instances.push(Instance);
             return Instance;
         };
@@ -33,9 +33,7 @@ class Generator {
          * @function
          */
         this.detachAll = () => {
-            for (let i in this.state.instances) {
-                this.state.instances[i].detach();
-            }
+            this.state.instances.forEach((instance) => instance.detach());
         };
         /**
          * Revert all traversed links to their non-affiliated state
@@ -44,19 +42,19 @@ class Generator {
          */
         this.revert = () => {
             this.detachAll();
-            let nodes = ([].slice.call(document.body.getElementsByTagName('a')));
-            for (let i in nodes) {
-                let linkData = (0, nodeTools_1.getNodeData)(nodes[i]);
-                if (linkData && linkData.was) {
-                    nodes[i].href = linkData.was;
-                    (0, nodeTools_1.setNodeData)(nodes[i], {});
+            const nodes = Object.values(document.body.getElementsByTagName('a'));
+            nodes.forEach((node) => {
+                const linkData = (0, nodeTools_1.getNodeData)(node);
+                if (linkData && typeof linkData.was === 'string') {
+                    node.href = linkData.was;
+                    (0, nodeTools_1.setNodeData)(node, {});
                 }
-            }
+            });
         };
         try {
-            let config = (0, autoConfig_1.default)();
+            const config = (0, autoConfig_1.default)();
             if (typeof config === 'object') {
-                let auto = this.create(config);
+                const auto = this.create(config);
                 (0, log_1.default)(false, auto);
                 this.state.auto = auto;
                 auto.attach();

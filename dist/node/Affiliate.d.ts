@@ -1,4 +1,3 @@
-import URLParse from 'url-parse';
 import Log from './shared/log';
 export interface AffiliateConfigTag {
     hosts: string | string[];
@@ -9,7 +8,7 @@ export interface AffiliateConfigTag {
         to: string;
         from: string;
     }[];
-    modify?: (url: URLParse) => URLParse | string;
+    modify?: (url: URL) => URL | string;
 }
 export interface AffiliateConfig {
     tags: AffiliateConfigTag[];
@@ -33,7 +32,7 @@ declare class Affiliate {
      * @function
      * @param {object=} nodeSet The node to traverse for links (default: document.body)
      */
-    traverse(nodeSet?: HTMLElement): void;
+    traverse(nodeSet?: HTMLElement): Affiliate;
     /**
      * Modify the URL of a matching link while preserving the original link state
      *
@@ -43,18 +42,18 @@ declare class Affiliate {
      * @param {object} node Anchor link node
      * @param {object} tag Matching configuration tag
      */
-    modifyURL: (url: URLParse, node: HTMLAnchorElement, tag: AffiliateConfigTag) => void;
+    modifyURL: (url: URL, node: HTMLAnchorElement, tag: AffiliateConfigTag) => void;
     /**
      * Attach the mutation observer
      *
      * @function
      */
-    attach: () => void;
+    attach: () => Affiliate;
     /**
      * Detach the mutation observer
      *
      * @function
      */
-    detach: () => void;
+    detach: () => Affiliate;
 }
 export default Affiliate;

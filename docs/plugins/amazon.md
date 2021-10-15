@@ -9,7 +9,7 @@ Make sure [Affiliate](https://affiliate.js.org/) is already installed. Read the 
 ## Installation
 
 ```bash
-$ npm install --save affiliate affiliate-plugin-amazon
+$ npm install affiliate affiliate-plugin-amazon
 $ yarn add affiliate affiliate-plugin-amazon
 ```
 

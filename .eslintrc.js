@@ -1,22 +1,36 @@
+/* eslint-disable */
+
 module.exports = {
   env: {
     browser: true,
     node: true,
     es6: true,
   },
-  extends: ['eslint:recommended', 'google', '@typescript-eslint/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'prettier',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 11,
-    sourceType: 'module',
+    tsconfigRootDir: __dirname,
   },
   plugins: ['@typescript-eslint'],
   rules: {
-    indent: ['warn', 4],
+    indent: 'off',
     'max-len': 'off',
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'], // Your TypeScript files extension
+      parserOptions: {
+        project: ['./tsconfig.json'], // Specify it only for TypeScript files
+      },
+    },
+  ],
 };

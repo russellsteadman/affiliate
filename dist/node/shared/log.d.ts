@@ -3,4 +3,4 @@
  *
  * @module affiliate/src/Log
  */
-export default function (isError: boolean, ...args: any): void;
+export default function (isError: boolean, ...args: (string | number | object)[]): void;

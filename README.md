@@ -16,8 +16,7 @@ $ yarn add affiliate
 Or use a CDN ([check out the codeless setup](#blogs-and-related-sites))
 
 ```html
-<!-- Replace 3.0.0 with your intended version -->
-<script src="https://cdn.jsdelivr.net/npm/affiliate@3.0.0/dist/affiliate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"></script>
 ```
 
 ## What It Can Do
@@ -43,7 +42,8 @@ Affiliate has easy [plugins](https://affiliate.js.org/plugins), including one fo
 Read **[the documentation](https://affiliate.js.org/)** for more advanced usage.
 
 ```js
-const Affiliate = require('affiliate');
+import Affiliate from 'affiliate';
+
 const aff = Affiliate.create({
   tags: [
     {
@@ -60,6 +60,7 @@ const aff = Affiliate.create({
     },
   ],
 });
+
 aff.attach();
 ```
 
@@ -67,33 +68,32 @@ aff.attach();
 
 Affiliate is simple and quick to set up, even for more complex usage. Read the docs at: **[affiliate.js.org](https://affiliate.js.org/)**.
 
-### Blogs and Related Sites
+## Blogs and Related Sites
 
-A simplified codeless solution might better suit some blogging-style sites.
+A simplified codeless solution might better suit some sites that use content module systems, such as WordPress, SquareSpace, etc.
 
-Insert this code within the HTML `<head>...</head>` tag. The contents of the `data-aff` attribute will tell Affiliate what to do.
+Insert this code within the HTML `<head>...</head>` tag. The contents of the `data-auto-affiliate` attribute will tell Affiliate what to do.
 
 ```html
-<!-- Replace 2.0 with your intended version -->
 <script
-  data-aff="amazon.com, www.amazon.com : tag = MY-AMAZON-TAG"
-  src="https://cdn.jsdelivr.net/npm/affiliate@3.0/dist/affiliate.js"
+  data-auto-affiliate="WHERE amazon.com, www.amazon.com SET tag = MY-AMAZON-TAG"
+  src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"
   async
   id="aff-js"
 ></script>
 ```
 
-#### data-aff Syntax
+### data-auto-affiliate Syntax
 
-The syntax for data-aff is a comma separated list of domains, a colon, and then comma separated list of url queries in the format `key=value`. Multiple website groups can be separated by an exclamation mark.
+The syntax for data-auto-affiliate is capital `WHERE`, a comma separated list of domains, capital `SET`, and then comma separated list of URL queries in the format `key=value`. Multiple website groups can be separated by a capital `AND`.
 
-```
-amazon.com, www.amazon.com : tag = MY-AMAZON-TAG ! example.com, shop.example.com : ref = MY-OTHER-TAG
+```sql
+WHERE amazon.com, www.amazon.com SET tag = MY-AMAZON-TAG AND WHERE example.com, shop.example.com SET ref = MY-OTHER-TAG
 ```
 
 ## Left with Questions?
 
-If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/russellsteadman/affiliate/issues/new) detailing what needs to be improved. It will be addressed quickly.
+If for any reason you feel that this documentation is unclear or incomplete, [add an issue](https://github.com/russellsteadman/affiliate/issues/new) detailing what needs to be improved.
 
 ## Star This Project
 

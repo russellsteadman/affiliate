@@ -3,7 +3,10 @@
  *
  * @module affiliate/src/Log
  */
-export default function (isError: boolean, ...args: any) {
+export default function (
+  isError: boolean,
+  ...args: (string | number | object)[]
+) {
   const textId = '[Affiliate] ';
 
   if (typeof console === 'object') {

@@ -16,15 +16,15 @@ class Generator {
 
   constructor() {
     try {
-      let config = AutoConfig();
+      const config = AutoConfig();
       if (typeof config === 'object') {
-        let auto = this.create(config);
+        const auto = this.create(config);
         Log(false, auto);
         this.state.auto = auto;
         auto.attach();
       }
     } catch (e) {
-      Log(true, e);
+      Log(true, e as Error);
     }
   }
 
@@ -36,7 +36,7 @@ class Generator {
    * @returns {object} Affiliate instance
    */
   create = (config: Partial<AffiliateConfig>) => {
-    let Instance = new Affiliate(config);
+    const Instance = new Affiliate(config);
     this.state.instances.push(Instance);
     return Instance;
   };
@@ -56,9 +56,7 @@ class Generator {
    * @function
    */
   detachAll = () => {
-    for (let i in this.state.instances) {
-      this.state.instances[i].detach();
-    }
+    this.state.instances.forEach((instance) => instance.detach());
   };
 
   /**
@@ -68,16 +66,14 @@ class Generator {
    */
   revert = () => {
     this.detachAll();
-    let nodes = <HTMLAnchorElement[]>(
-      [].slice.call(document.body.getElementsByTagName('a'))
-    );
-    for (let i in nodes) {
-      let linkData = getNodeData(nodes[i]);
-      if (linkData && linkData.was) {
-        nodes[i].href = linkData.was;
-        setNodeData(nodes[i], {});
+    const nodes = Object.values(document.body.getElementsByTagName('a'));
+    nodes.forEach((node) => {
+      const linkData = getNodeData(node);
+      if (linkData && typeof linkData.was === 'string') {
+        node.href = linkData.was;
+        setNodeData(node, {});
       }
-    }
+    });
   };
 }
 

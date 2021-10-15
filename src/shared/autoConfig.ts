@@ -1,52 +1,36 @@
-type BreakUpData = string | Array<BreakUpData>;
-
-/* Utility function for parsing data-aff syntax */
-const breakUp: (data: BreakUpData, delimiter: string) => BreakUpData = (
-  data: BreakUpData | string,
-  delimiter: string
-) => {
-  if (typeof data === 'object') {
-    for (let i in data) {
-      data[i] = breakUp(data[i], delimiter);
-    }
-  } else if (typeof data === 'string') {
-    data = data.split(delimiter);
-    for (let o in data) {
-      data[o] = (<string>data[o]).trim();
-    }
-  }
-  return data;
-};
+const AUTO_CONFIG_SYNTAX_REGEX = /WHERE (.+?) SET (.+?)\s*(?:AND|$)/g;
 
 /* Setup automatic configuration */
 const AutoConfig = () => {
-  let scriptNode = document.getElementById('aff-js');
+  const scriptNode = document.getElementById('aff-js');
 
-  if (typeof scriptNode === 'object' && scriptNode !== null) {
-    let nodeData = scriptNode.dataset.aff;
+  if (typeof scriptNode === 'object' && scriptNode) {
+    const nodeData = scriptNode?.dataset?.autoAffiliate;
 
     if (typeof nodeData === 'string') {
-      let parsedData = <string[][][][]>(
-        breakUp(breakUp(breakUp(breakUp(nodeData, '!'), ':'), ','), '=')
-      );
-      let tags = [];
+      const tags: { hosts: string[]; query: Record<string, string> }[] = [];
 
-      for (let i in parsedData) {
-        let tag: {
-          hosts: string[];
-          query: { [key: string]: string };
-        } = {
-          hosts: [],
-          query: {},
-        };
-        for (let o in parsedData[i][0]) {
-          tag.hosts.push(parsedData[i][0][o][0]);
-        }
-        for (let u in parsedData[i][1]) {
-          tag.query[parsedData[i][1][u][0]] = parsedData[i][1][u][1];
-        }
-        tags.push(tag);
-      }
+      const expressions = nodeData.match(AUTO_CONFIG_SYNTAX_REGEX);
+
+      if (!expressions) return;
+
+      Object.values(expressions).forEach((expression) => {
+        const components = AUTO_CONFIG_SYNTAX_REGEX.exec(expression);
+
+        if (!components || components.length !== 3) return;
+
+        const hosts = components[1];
+        const queries = components[2];
+
+        tags.push({
+          hosts: hosts.split(',').map((host) => host.trim()),
+          query: queries.split(',').reduce((a, b) => {
+            const [key, value] = b.split('=');
+            if (key && value) a[key.trim()] = value.trim();
+            return a;
+          }, {} as Record<string, string>),
+        });
+      });
 
       return { tags };
     }
