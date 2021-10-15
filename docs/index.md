@@ -93,7 +93,7 @@ An array of objects with a `from` key that is a regex or string and a `to` key t
 
 ### config.tags[].modify
 
-This exposes an instance of the [`url-parse`](https://www.npmjs.com/package/url-parse#usage) library. This can be used to update individual parts of the URL, such as the hostname or hash. It expects the instance or a URL string to be returned.
+This exposes a `URL` instance. This can be used to update individual parts of the URL, such as the hostname or hash. It expects the `URL` instance or a URL string to be returned.
 
 ## Affiliate API
 
