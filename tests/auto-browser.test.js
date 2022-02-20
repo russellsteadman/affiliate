@@ -20,7 +20,7 @@ beforeAll(async () => {
       res();
     }),
   );
-}, 10000);
+}, 25000);
 
 const LANDING_PAGE = 'https://example.com/';
 const UTILITIES = `

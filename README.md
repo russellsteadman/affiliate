@@ -9,7 +9,7 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 Use NPM or Yarn
 
 ```bash
-$ npm install --save affiliate
+$ npm install affiliate
 $ yarn add affiliate
 ```
 
@@ -18,6 +18,10 @@ Or use a CDN ([check out the codeless setup](#blogs-and-related-sites))
 ```html
 <script src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"></script>
 ```
+
+The precompiled version of `affiliate@4` supports modern browsers by default. You
+can add support for other browsers by using
+[`@babel/preset-env`](https://www.npmjs.com/package/@babel/preset-env) with [`core-js`](https://www.npmjs.com/package/core-js).
 
 ## What It Can Do
 

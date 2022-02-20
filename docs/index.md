@@ -9,7 +9,7 @@ Affiliate is a platform agnostic link affiliator. Simplify affiliating links wit
 Use NPM or Yarn
 
 ```bash
-$ npm install --save affiliate
+$ npm install affiliate
 $ yarn add affiliate
 ```
 

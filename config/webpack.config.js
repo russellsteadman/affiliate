@@ -1,5 +1,6 @@
 const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: './../src/index.ts',
@@ -50,4 +51,14 @@ module.exports = {
   target: 'web',
   mode: 'production',
   devtool: 'source-map',
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          ecma: '2016',
+        },
+      }),
+    ],
+  },
 };
