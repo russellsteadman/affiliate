@@ -79,4 +79,4 @@ amazonAff.attach(); // this will start affiliation
 
 ## License
 
-MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_amz_repo&utm_medium=copyright). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate-plugin-amazon/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_amz_repo&utm_medium=copyright). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate-plugin-amazon/blob/main/LICENSE) file.

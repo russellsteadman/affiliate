@@ -181,4 +181,4 @@ Like this project? Let me know by [putting a star on it](https://github.com/russ
 
 ## License
 
-MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=readme_copy). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate/blob/master/LICENSE) file.
+MIT (C) [Russell Steadman](https://www.russellsteadman.com/?utm_source=aff_repo&utm_medium=readme_copy). Learn more in the [LICENSE](https://github.com/russellsteadman/affiliate/blob/main/LICENSE) file.
