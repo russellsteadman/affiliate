@@ -79,7 +79,7 @@ Insert this code within the HTML `<head>...</head>` tag. The contents of the `da
 ```html
 <script
   data-auto-affiliate="WHERE amazon.com, www.amazon.com SET tag = MY-AMAZON-TAG"
-  src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"
+  src="https://cdn.jsdelivr.net/npm/affiliate@5/dist/web/affiliate.web.js"
   async
   id="aff-js"
 ></script>
