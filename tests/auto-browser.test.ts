@@ -1,26 +1,13 @@
-/* global test expect beforeAll page */
+import { test, expect } from '@jest/globals';
+import { JSHandle, Page } from 'puppeteer';
+import fs from 'fs';
+import path from 'path';
 
-require('core-js/stable');
-require('regenerator-runtime/runtime');
+declare const page: Page;
 
-const webpack = require('webpack');
-const fs = require('fs');
-const path = require('path');
-let Affiliate = '';
-
-beforeAll(async () => {
-  await new Promise((res, rej) =>
-    webpack(require('../config/webpack.config'), (err, stats) => {
-      if (err || stats.hasErrors())
-        rej(new Error('Could not compile Affiliate'));
-
-      Affiliate = fs
-        .readFileSync(path.join(__dirname, '../dist/web/affiliate.web.js'))
-        .toString('utf8');
-      res();
-    }),
-  );
-}, 25000);
+const Affiliate = fs
+  .readFileSync(path.join(__dirname, '../dist/web/affiliate.web.js'))
+  .toString('utf8');
 
 const LANDING_PAGE = 'https://example.com/';
 const UTILITIES = `
@@ -193,11 +180,13 @@ test('Instance can use data-auto-affiliate', async () => {
         window.linkThree = createLink('https://other.amazon.com/ref-regex/'); 
     `);
 
-  let document = await page.evaluateHandle('document');
+  const document = (await page.evaluateHandle(
+    'document',
+  )) as JSHandle<Document>;
 
   await page.evaluate(
     (document, Affiliate) => {
-      var script = document.createElement('script');
+      const script = document.createElement('script');
       script.setAttribute(
         'data-auto-affiliate',
         'WHERE amazon.com, www.amazon.com SET tag = my-amz-tag',
@@ -211,7 +200,7 @@ test('Instance can use data-auto-affiliate', async () => {
     Affiliate,
   );
 
-  document.dispose();
+  await document.dispose();
 
   expect(await page.evaluate(`window.link.getAttribute('href')`)).toBe(
     'https://amazon.com/ref-regex/?tag=my-amz-tag',
