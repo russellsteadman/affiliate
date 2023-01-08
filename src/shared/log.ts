@@ -1,9 +1,7 @@
 /**
  * log handles formatting and doesn't throw errors is console is undefined
- *
- * @module affiliate/src/Log
  */
-export default function (
+export default function log(
   isError: boolean,
   ...args: (string | number | object)[]
 ) {

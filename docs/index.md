@@ -16,7 +16,7 @@ $ yarn add affiliate
 Or use a CDN ([check out the codeless setup](#blogs-and-related-sites))
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/affiliate@5/dist/web/affiliate.web.js"></script>
 ```
 
 ## What It Can Do
@@ -105,6 +105,8 @@ let instances = Affiliate.instances; // an array of all instances
 Affiliate.detachAll(); // stops all instances from making automatic changes
 Affiliate.revert(); // detaches all instances and reverts all urls
 
+newInstance.convert('https://www.example.com/'); // convert a provided URL or string
+
 newInstance.attach(); // begins listening to DOM events
 newInstance.detach(); // stops listening to DOM events
 ```
@@ -153,7 +155,7 @@ Insert this code within the HTML `<head>...</head>` tag. The contents of the `da
 ```html
 <script
   data-auto-affiliate="WHERE amazon.com, www.amazon.com SET tag = MY-AMAZON-TAG"
-  src="https://cdn.jsdelivr.net/npm/affiliate@4/dist/web/affiliate.web.js"
+  src="https://cdn.jsdelivr.net/npm/affiliate@5/dist/web/affiliate.web.js"
   async
   id="aff-js"
 ></script>

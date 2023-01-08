@@ -212,3 +212,39 @@ test('Instance can use data-auto-affiliate', async () => {
     'https://other.amazon.com/ref-regex/',
   );
 });
+
+test('Instance can manually convert links', async () => {
+  await page.goto(LANDING_PAGE);
+  await page.addScriptTag({ content: Affiliate });
+  await page.evaluate(UTILITIES);
+
+  await page.evaluate(`
+        let link = 'https://www.example.com/ref-regex/';
+        let linkTwo = 'https://example.org/ref-regex/';
+        let linkThree = 'https://www.example.com/ref-regex/?ab=c#fun';
+        let aff = Affiliate.create(optionOne);
+    `);
+
+  expect(await page.evaluate(`aff.convert(link)`)).toBe(
+    'https://tst.www.example.com/my-tag/-tag?ref=my-tag',
+  );
+  expect(await page.evaluate(`aff.convert(linkTwo)`)).toBe(
+    'https://example.org/ref-regex/',
+  );
+  expect(await page.evaluate(`aff.convert(linkThree)`)).toBe(
+    'https://tst.www.example.com/my-tag/-tag?ab=c&ref=my-tag#fun',
+  );
+
+  await page.evaluate(`
+        link = 'https://example.com/ref-regex/';
+        linkTwo = 'https://shop.example.org/ref-regex/';
+        aff = Affiliate.create(optionTwo);
+    `);
+
+  expect(await page.evaluate(`aff.convert(link)`)).toBe(
+    'https://example.com/ref-regex/',
+  );
+  expect(await page.evaluate(`aff.convert(linkTwo)`)).toBe(
+    'https://tst2.shop.example.org/my-tag2/-tag2?tag=my-tag2',
+  );
+});

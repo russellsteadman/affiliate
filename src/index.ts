@@ -4,7 +4,7 @@ import Log from './shared/log';
 import { getNodeData, setNodeData } from './shared/nodeTools';
 
 /**
- * @class Set up the global Affiliate export
+ * Set up the global Affiliate export
  */
 class Generator {
   state: {
@@ -30,10 +30,6 @@ class Generator {
 
   /**
    * Create a new Affiliate instance
-   *
-   * @function
-   * @param {object} config Configuration options for Affiliate
-   * @returns {object} Affiliate instance
    */
   create = (config: Partial<AffiliateConfig>) => {
     const Instance = new Affiliate(config);
@@ -43,8 +39,6 @@ class Generator {
 
   /**
    * Expose the instance list
-   *
-   * @type {Array.<object>}
    */
   get instances() {
     return [...this.state.instances];
@@ -52,8 +46,6 @@ class Generator {
 
   /**
    * Detach automatic link traversal
-   *
-   * @function
    */
   detachAll = () => {
     this.state.instances.forEach((instance) => instance.detach());
@@ -61,8 +53,6 @@ class Generator {
 
   /**
    * Revert all traversed links to their non-affiliated state
-   *
-   * @function
    */
   revert = () => {
     this.detachAll();

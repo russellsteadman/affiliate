@@ -18,7 +18,7 @@ export interface AffiliateConfig {
 }
 
 /**
- * @class Manages stateful affiliation
+ * Manages stateful affiliation
  */
 class Affiliate {
   state: {
@@ -105,9 +105,6 @@ class Affiliate {
 
   /**
    * Manual function to search the DOM for unaffiliated links
-   *
-   * @function
-   * @param {object=} nodeSet The node to traverse for links (default: document.body)
    */
   traverse(nodeSet: HTMLElement = document.body): Affiliate {
     if (
@@ -140,16 +137,13 @@ class Affiliate {
       // Parse the URL natively
       const url = new URL(
         (<HTMLAnchorElement>node).href ?? '',
-        window?.location.origin,
+        window.location.origin,
       );
 
       // Only modify hosts provided.
-      if (this.state.hosts.indexOf(url.host) === -1) return;
-      this.state.config.tags.forEach((tag) => {
-        if (tag.hosts.indexOf(url.host) !== -1) {
-          this.modifyURL(url, <HTMLAnchorElement>node, tag);
-        }
-      });
+      if (!this.state.hosts.includes(url.host)) return;
+
+      this.modifyURL(url, <HTMLAnchorElement>node);
     });
 
     return this;
@@ -157,14 +151,8 @@ class Affiliate {
 
   /**
    * Modify the URL of a matching link while preserving the original link state
-   *
-   * @private
-   * @function
-   * @param {string} url Original url string
-   * @param {object} node Anchor link node
-   * @param {object} tag Matching configuration tag
    */
-  modifyURL = (url: URL, node: HTMLAnchorElement, tag: AffiliateConfigTag) => {
+  modifyURL = (url: URL, node: HTMLAnchorElement) => {
     // Check if URL is already modified
     const linkData = getNodeData(node);
     if (linkData.is && linkData.is === url.href) return;
@@ -174,30 +162,7 @@ class Affiliate {
 
     this.log(false, 'Discovered URL: ' + url.href);
 
-    // Change query variables
-    if (tag.query) {
-      Object.keys(tag.query ?? {}).forEach((key) => {
-        if (typeof tag.query === 'object')
-          url.searchParams.set(key, tag.query[key]);
-      });
-    }
-
-    // Run the modification function
-    if (typeof tag.modify === 'function') {
-      try {
-        let returnedURL = tag.modify(url);
-        if (typeof returnedURL === 'object') returnedURL = returnedURL.href;
-        url = new URL(returnedURL, window?.location.origin);
-      } catch (e) {
-        Log(true, e as Error);
-      }
-    }
-
-    // Replace certain parts of the url
-    let modifiedUrl = url.href;
-    tag.replace?.forEach((replacement) => {
-      modifiedUrl = modifiedUrl.replace(replacement.from, replacement.to);
-    });
+    const modifiedUrl = this.convert(url);
 
     // Update the href tag and save the url to the DOM node
     node.href = modifiedUrl;
@@ -208,9 +173,61 @@ class Affiliate {
   };
 
   /**
+   * Modify a manually provided URL
+   */
+  convert = (url: string | URL): string => {
+    // Convert input URL object to string
+    if (typeof url === 'object') url = url.href;
+
+    // Check if URL global exists
+    if (!hasURL) {
+      this.log(true, 'This browser needs a URL polyfill.');
+      return url;
+    }
+
+    // Parse the URL natively
+    const modURL: URL = new URL(url, window.location.origin);
+
+    // Only modify host provided
+    if (!this.state.hosts.includes(modURL.host)) return modURL.href;
+
+    // Go through each tag
+    for (const tag of this.state.config.tags) {
+      // Check if the host matches
+      if (tag.hosts.includes(modURL.host)) {
+        // Change query variables
+        if (tag.query) {
+          Object.keys(tag.query ?? {}).forEach((key) => {
+            if (typeof tag.query === 'object')
+              modURL.searchParams.set(key, tag.query[key]);
+          });
+        }
+
+        // Run the modification function
+        if (typeof tag.modify === 'function') {
+          try {
+            let returnedURL = tag.modify(modURL);
+            if (typeof returnedURL === 'object') returnedURL = returnedURL.href;
+            modURL.href = returnedURL;
+          } catch (e) {
+            Log(true, e as Error);
+          }
+        }
+
+        // Replace certain parts of the url
+        tag.replace?.forEach((replacement) => {
+          modURL.href = modURL.href.replace(replacement.from, replacement.to);
+        });
+
+        return modURL.href;
+      }
+    }
+
+    return modURL.href;
+  };
+
+  /**
    * Attach the mutation observer
-   *
-   * @function
    */
   attach = (): Affiliate => {
     // Cannot attach twice, cannot attach for node
@@ -248,8 +265,6 @@ class Affiliate {
 
   /**
    * Detach the mutation observer
-   *
-   * @function
    */
   detach = (): Affiliate => {
     if (!hasMutationObserver || !this.observer) return this;
